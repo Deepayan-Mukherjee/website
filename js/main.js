@@ -1,0 +1,106 @@
+// ---------------------------------------------------------------
+// Small, plain JS. No build step, no dependencies.
+// ---------------------------------------------------------------
+
+// Keep the footer year current without editing it by hand.
+document.addEventListener("DOMContentLoaded", () => {
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+});
+
+// Photograph lightbox: click a thumbnail on the Photographs page
+// to see it full-size; click again (or press Escape) to close.
+document.addEventListener("DOMContentLoaded", () => {
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  if (!lightbox || !lightboxImg) return; // not on the photographs page
+
+  document.querySelectorAll(".gallery-link").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      lightboxImg.src = link.getAttribute("href");
+      lightboxImg.alt = link.querySelector("img")?.alt || "";
+      lightbox.classList.add("open");
+    });
+  });
+
+  lightbox.addEventListener("click", () => {
+    lightbox.classList.remove("open");
+    lightboxImg.src = "";
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      lightbox.classList.remove("open");
+      lightboxImg.src = "";
+    }
+  });
+});
+
+// ---------------------------------------------------------------
+// Long-form reading aids. All of this only runs on a page that has
+// an <article class="essay"> with a .content block inside — i.e.
+// essay and poem pages. Nothing here needs configuring per-post.
+// ---------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const article = document.querySelector("article.essay");
+  const content = article?.querySelector(".content");
+  if (!article || !content) return;
+
+  // --- auto reading time, written into <span id="reading-time"> if present ---
+  const words = content.textContent.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.round(words / 200)); // ~200 wpm
+  const timeEl = document.getElementById("reading-time");
+  if (timeEl) timeEl.textContent = `${minutes} min read`;
+
+  // --- table of contents, only when there's enough structure to need one ---
+  const headings = content.querySelectorAll("h2");
+  if (headings.length >= 3) {
+    const toc = document.createElement("nav");
+    toc.className = "toc";
+    toc.setAttribute("aria-label", "Table of contents");
+
+    const label = document.createElement("p");
+    label.className = "toc-label";
+    label.textContent = "In this essay";
+    toc.appendChild(label);
+
+    const list = document.createElement("ol");
+    headings.forEach((h, i) => {
+      if (!h.id) h.id = `section-${i + 1}`;
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `#${h.id}`;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    toc.appendChild(list);
+
+    content.parentNode.insertBefore(toc, content);
+  }
+
+  // --- reading progress bar, fills as you scroll through the article ---
+  const bar = document.createElement("div");
+  bar.className = "reading-progress";
+  document.body.appendChild(bar);
+
+  const updateProgress = () => {
+    const rect = article.getBoundingClientRect();
+    const total = article.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top, 0), total);
+    const pct = total > 0 ? (scrolled / total) * 100 : 0;
+    bar.style.width = `${pct}%`;
+  };
+  document.addEventListener("scroll", updateProgress, { passive: true });
+  updateProgress();
+
+  // --- back to top, only worth showing once the piece is reasonably long ---
+  if (words > 600) {
+    const back = document.createElement("a");
+    back.href = "#top";
+    back.className = "back-to-top";
+    back.textContent = "↑ Back to top";
+    article.appendChild(back);
+  }
+});
