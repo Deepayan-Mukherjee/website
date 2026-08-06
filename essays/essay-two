@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> I write</title>
+  <meta name="post-date" content="2026-08-30">
+  <meta name="post-kind" content="essay">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <a class="site-mark" href="../index.html">
+      <span class="glyph">DM</span>
+      <span class="wordmark">Deepayan Mukherjee</span>
+    </a>
+    <p class="site-tagline">essays, verse, and other unfinished thoughts</p>
+    <nav class="site-nav">
+      <a href="index.html" class="active">Essays</a>
+      <a href="../poetry/index.html">Poetry</a>
+      <a href="../photographs/index.html">Photographs</a>
+      <a href="../about.html">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <article class="essay">
+      <div class="article-head">
+        <h1>Why I Write Here</h1>
+        <p class="meta-row reading-meta">30 July 2026 · <span id="reading-time">1 min read</span></p>
+      </div>
+      <div class="content">
+        <p class="lede">This is a placeholder essay — replace it with your own. It exists so you can see how the drop cap, headings, table of contents, and block quotes look once real writing goes in.</p>
+
+        <h2>The first</h2>
+        <p>Sub-headings look like this. Use them if the essay actually has parts; skip them if it doesn't. Once an essay has three or more of them, a table of contents appears automatically above the text — nothing to configure, it just reads the headings on the page.</p>
+
+        <blockquote>A quoted line looks like this —</blockquote>
+
+        <h2>The second </h2>
+        <p>The thin bar at the very top of the page fills in as you scroll, so a reader always has a sense of how much is left — useful once a piece runs past a couple of thousand words, which is exactly the length this whole layout is built for.</p>
+
+        <h2>The last</h2>
+        <p>Delete this file once you've got your first real essay ready, or just overwrite it. The reading time above updates itself based on an actual word count, so you never have to edit it by hand.</p>
+
+        <h2>A note on math</h2>
+        <p>If an essay needs it, you can write LaTeX directly in the text — inline, like $y = mx + c$, or as its own block:</p>
+        <p>$$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$</p>
+        <p>It renders automatically on any essay page that includes the MathJax script tags at the bottom of the file. If a piece has no math in it, just leave those two script tags out — nothing else changes.</p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; <span id="year">2026</span> Deepayan Mukherjee</span>
+    <span>Patna · Pilani</span>
+  </footer>
+
+  <script src="../js/main.js"></script>
+
+  <!--
+    LaTeX support — only include these two script tags on essay pages
+    that actually use math. Write math as $inline$ or $$block$$, same
+    syntax as normal LaTeX. Nothing else to configure.
+  -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.js"></script>
+</body>
+</html>
