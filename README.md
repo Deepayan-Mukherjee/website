@@ -1,12 +1,5 @@
 # deepayanmukherjee.in
 
-A plain HTML/CSS/JS site — every essay, poem, and photo page is a
-hand-written file, no framework. The one exception: a small script
-auto-generates each section's listing page so you never have to
-manually add a link when you publish something new (see "How the
-auto-indexing works" below). Open any `.html` file directly in a
-browser to preview it exactly as it'll look live.
-
 ## Structure
 
 ```
