@@ -131,15 +131,15 @@ body::before {
   --rhomb-size: 88px;
   background-image:
     repeating-linear-gradient(60deg,
-      color-mix(in srgb, var(--accent) 65%, transparent) 0 1px,
-      transparent 1px calc(var(--rhomb-size) * 0.5)),
+      color-mix(in srgb, var(--accent) 85%, transparent) 0 1.5px,
+      transparent 1.5px calc(var(--rhomb-size) * 0.5)),
     repeating-linear-gradient(-60deg,
-      color-mix(in srgb, var(--accent) 65%, transparent) 0 1px,
-      transparent 1px calc(var(--rhomb-size) * 0.5));
-  background-position: 0 var(--pattern-shift, 0px), 0 var(--pattern-shift, 0px);
-  opacity: 0.075;
-  mask-image: radial-gradient(ellipse 70% 60% at 78% 42%, #000 0%, transparent 72%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 78% 42%, #000 0%, transparent 72%);
+      color-mix(in srgb, var(--accent) 85%, transparent) 0 1.5px,
+      transparent 1.5px calc(var(--rhomb-size) * 0.5));
+  background-position: 0 var(--monogram-shift, 0px), 0 var(--monogram-shift, 0px);
+  opacity: 0.22;
+  mask-image: radial-gradient(ellipse 85% 80% at 82% 45%, #000 0%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 82% 45%, #000 0%, transparent 85%);
 }
 
 .site-header, main, .site-footer { position: relative; z-index: 1; }
