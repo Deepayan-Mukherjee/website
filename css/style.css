@@ -664,8 +664,15 @@ article.essay .content > p:first-of-type::first-letter,
   color: var(--ink-soft);
 }
 
-.gallery figcaption a { border: none; color: var(--ink-soft); }
-.gallery figcaption a:hover { color: var(--accent); }
+.gallery figcaption a {
+  color: var(--accent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: color 200ms ease, border-color 200ms ease;
+}
+.gallery figcaption a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
 
 /* ---------- lightbox ---------- */
 

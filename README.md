@@ -25,11 +25,13 @@ images/
   photographs/                  the actual photo files go here
 icons/                        favicon + app icons (all sizes)
 fonts/                        self-hosted webfonts (see below)
+partials/                     shared snippets injected into every page
 site.webmanifest              app icon metadata
 css/style.css                 all styling, one file
 js/main.js                    footer year, photo lightbox, reading aids
 scripts/build_index.py        rebuilds the listings above, run by CI
 scripts/generate_photo_pages.py  makes a page per image, run by CI
+scripts/inject_partials.py    fills in shared content, run by CI
 ```
 
 ## Adding a new essay
@@ -225,6 +227,32 @@ www    CNAME    YOUR-USERNAME.github.io.
 DNS changes can take a few minutes to a few hours to propagate. Once
 they do, GitHub Pages issues a free HTTPS certificate automatically —
 nothing for you to set up.
+
+## Changing something on every page at once
+
+A few things — right now just the footer's location line — live in
+one file instead of being copy-pasted across all nine (soon to be
+more) pages. To change one:
+
+1. Edit the matching file in `partials/` — e.g. `partials/footer-location.txt`
+2. Push
+
+Every page picks it up on the next deploy automatically. This is
+what makes "change Patna · Pilani to Delhi" a one-line edit instead
+of a find-and-replace across the whole site.
+
+**To make something else site-wide** — say you want a line that
+appears the same way on every page:
+
+1. Create `partials/whatever-you-call-it.txt` with the content
+2. Wrap the spot in your HTML with
+   `<!-- PARTIAL:whatever-you-call-it --> ... <!-- /PARTIAL -->`
+3. Push
+
+`scripts/inject_partials.py` runs before the index rebuild on every
+push and fills in every marker it finds a matching file for. A
+marker with no matching partial is left alone, with a warning in the
+build log — so a typo doesn't silently delete anything.
 
 ## Clean URLs
 
