@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photographs · Deepayan Mukherjee</title>
+  <title>Sample Photograph · Deepayan Mukherjee</title>
   <link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="../icons/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="../icons/favicon-16.png" sizes="16x16" type="image/png">
   <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
   <link rel="manifest" href="../site.webmanifest">
+  <meta name="post-date" content="2026-07-30">
+  <meta name="post-kind" content="photograph">
+  <meta name="post-image" content="../images/photographs/sample.jpg">
   <link rel="stylesheet" href="../css/style.css?v=14">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +22,7 @@
     }
   </script>
 </head>
-<body>
+<body id="top">
 
   <header class="site-header">
     <div class="site-header-inner">
@@ -40,32 +43,17 @@
   </nav>
 
   <main>
-    <div class="list-header">
-      <h1>Photographs</h1>
-      <p>From Pilani, Patna, and wherever else the camera came along.</p>
-    </div>
-
-    <div class="gallery" id="gallery">
-      <!-- AUTO-INDEX:photographs -->
-      <figure>
-        <a class="gallery-link" href="../images/photographs/sample.jpg" data-page="sample.html">
-          <img src="../images/photographs/sample.jpg" alt="Sample Photograph" loading="lazy">
-        </a>
-        <figcaption><a href="sample.html">Sample Photograph</a> · Jul 2026</figcaption>
-      </figure>
-      <!-- /AUTO-INDEX -->
-      <!--
-        Don't hand-edit between the markers above — a script rebuilds
-        that part automatically from every .html file in this folder
-        each time you push. See README.md.
-      -->
-    </div>
+    <article class="essay">
+      <div class="article-head">
+        <h1>Sample Photograph</h1>
+        <p class="meta-row">30 July 2026</p>
+      </div>
+      <img src="../images/photographs/sample.jpg" alt="Sample Photograph" style="border:1px solid var(--rule); margin-bottom:1.8rem;">
+      <div class="content">
+        <p>Replace this image with your own — drop a file into images/photographs/ and a page like this one is generated for it automatically. This caption comes from the matching sample.txt sidecar; delete both when you add real photos.</p>
+      </div>
+    </article>
   </main>
-
-  <!-- lightbox overlay, hidden until a photo is clicked -->
-  <div class="lightbox" id="lightbox">
-    <img id="lightbox-img" src="" alt="">
-  </div>
 
   <footer class="site-footer">
     <div class="site-footer-inner">

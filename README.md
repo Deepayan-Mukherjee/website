@@ -28,6 +28,7 @@ site.webmanifest              app icon metadata
 css/style.css                 all styling, one file
 js/main.js                    footer year, photo lightbox, reading aids
 scripts/build_index.py        rebuilds the listings above, run by CI
+scripts/generate_photo_pages.py  makes a page per image, run by CI
 ```
 
 ## Adding a new essay
@@ -55,14 +56,37 @@ GitHub if a piece doesn't show up after pushing.
 
 ## Adding a photograph
 
-1. Drop the image file into `images/photographs/`.
-2. Duplicate `photographs/sample-photograph.html`, rename it, and edit
-   the `<title>`, `post-date`, `post-image` (point it at your new
-   image), the `<h1>`, and the caption text in `<div class="content">`.
-3. Push. The gallery grid on `photographs/index.html` rebuilds itself
-   from every file in the folder, same as essays and poetry — clicking
-   a thumbnail still opens the full-size lightbox view, and the
-   caption links through to that photo's own page.
+Drop the image into `images/photographs/` and push. That's the whole
+thing — a page for it is generated automatically, and the gallery
+listing picks it up.
+
+Title, date and caption are worked out like this:
+
+- **Title** — from the filename, tidied up. `old-delhi-rooftops.jpg`
+  becomes "Old Delhi Rooftops".
+- **Date** — the photo's EXIF shooting date if it has one (most phone
+  and camera files do). Failing that, a date at the front of the
+  filename: `2026-06-02-monsoon-arrives.jpg`. Failing that, today's
+  date, with a warning in the build log telling you to pin it.
+- **Caption** — none by default.
+
+To override any of those, put a `.txt` file next to the image with the
+same name — `images/photographs/rooftops.txt`:
+
+```
+title: Rooftops at dusk
+date: 2026-05-19
+caption: Shot from the roof of the hostel, about ten minutes
+         after the power cut started.
+```
+
+Every field is optional; anything you leave out falls back to the rules
+above. Captions can wrap across lines like the example — they get
+joined back together.
+
+Once a page has been generated it's never regenerated, so you can
+hand-edit `photographs/<name>.html` freely and the script will leave it
+alone from then on.
 
 ## How the auto-indexing works
 
