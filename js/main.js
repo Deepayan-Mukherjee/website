@@ -92,6 +92,89 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", onScroll, { passive: true });
 });
 
+// ---------------------------------------------------------------
+// Custom ring cursor. Follows the pointer with a little trailing
+// smoothness, and expands to snap around whatever hoverable element
+// (links, buttons) it's currently over rather than just growing by a
+// fixed amount. Only activates on the first real mouse movement, so
+// touch devices (which fire a synthetic mousemove on tap) never get
+// stuck with a hidden native cursor and no visible replacement.
+// ---------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (window.matchMedia("(pointer: coarse)").matches) return; // touch/no real pointer
+
+  const ring = document.createElement("div");
+  ring.id = "cursor-ring";
+  document.body.appendChild(ring);
+
+  const HOVER_SELECTOR = "a, button, .gallery-link, [role='button']";
+
+  let mouseX = -100, mouseY = -100;
+  let ringX = -100, ringY = -100;
+  let activated = false;
+  let currentTarget = null;
+
+  const activate = () => {
+    if (activated) return;
+    activated = true;
+    document.body.classList.add("has-custom-cursor");
+    ring.classList.add("active");
+  };
+
+  window.addEventListener("mousemove", (e) => {
+    activate();
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    const hovered = e.target.closest(HOVER_SELECTOR);
+    if (hovered !== currentTarget) {
+      currentTarget = hovered;
+      if (hovered) {
+        const r = hovered.getBoundingClientRect();
+        const pad = 6;
+        ring.style.width = `${Math.round(r.width + pad * 2)}px`;
+        ring.style.height = `${Math.round(r.height + pad * 2)}px`;
+        ring.style.borderRadius = r.width < r.height * 1.4 && hovered.matches("button, .theme-toggle")
+          ? "999px" : "6px";
+        ring.classList.add("snapped");
+        ring.dataset.snapTarget = "1";
+      } else {
+        ring.style.width = "";
+        ring.style.height = "";
+        ring.style.borderRadius = "";
+        ring.classList.remove("snapped");
+        delete ring.dataset.snapTarget;
+      }
+    }
+  }, { passive: true });
+
+  window.addEventListener("mouseleave", () => {
+    ring.classList.remove("active");
+    activated = false;
+  });
+  window.addEventListener("mouseenter", activate);
+
+  const tick = () => {
+    // Snapped state: center the ring on the target element itself
+    // rather than trailing the raw pointer position, so it actually
+    // looks locked to the element instead of hovering near it.
+    if (currentTarget && ring.dataset.snapTarget) {
+      const r = currentTarget.getBoundingClientRect();
+      const targetX = r.left + r.width / 2;
+      const targetY = r.top + r.height / 2;
+      ringX += (targetX - ringX) * 0.35;
+      ringY += (targetY - ringY) * 0.35;
+    } else {
+      ringX += (mouseX - ringX) * 0.35;
+      ringY += (mouseY - ringY) * 0.35;
+    }
+    ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+});
+
 // Dark/light toggle. The no-flash inline script in <head> sets the
 // initial state before paint; this just wires up the button and
 // remembers the choice for next visit.
@@ -228,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const shift = window.scrollY * -0.12;
+        const shift = window.scrollY * 0.12;
         document.documentElement.style.setProperty("--monogram-shift", `${shift}px`);
         ticking = false;
       });
