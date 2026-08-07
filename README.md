@@ -109,15 +109,26 @@ that as the start of a math expression. Two ways around it:
 
 Either is fine — pick whichever you'll remember to do consistently.
 
-## Adding a photograph
+## Scroll animations
 
-1. Put the image file in `images/photographs/`.
-2. In `photographs/index.html`, copy one `<figure>...</figure>` block,
-   point both the `href` and `src` at your new file, edit the caption.
+Page titles, section headings, list rows, and gallery photos fade
+and rise gently into place as you scroll to them — applied
+automatically by `js/main.js` to those element types, so it works
+on every essay/poem/photo without adding anything to the HTML
+yourself. Body paragraphs are deliberately left alone — animating
+every paragraph of a long essay would get in the way of actually
+reading it, so only the structural/navigational elements move.
 
-Clicking a photo opens it full-size (that's the one bit of JavaScript
-on the site, in `js/main.js`) — nothing to configure, it works
-automatically for any photo added this way.
+There's also a faint, fixed background "D" watermark on wide
+screens (hidden below ~1200px) that drifts slightly as you scroll,
+for a subtle layered-depth effect. Both respect the visitor's OS
+`prefers-reduced-motion` setting — if that's on, everything just
+appears normally with no animation or drift at all.
+
+To change the feel of it: `.reveal` / `.reveal.visible` in
+`css/style.css` control the fade/rise itself (distance, duration,
+easing); the element list it applies to is the `selector` line near
+the top of the scroll-reveal block in `js/main.js`.
 
 ## Previewing before you publish
 

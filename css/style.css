@@ -7,10 +7,11 @@
 
 :root {
   --display-script: "Pinyon Script", cursive;
-  --display-caps:   "Cinzel", serif;
+  --wordmark-caps:  "Cinzel", serif;
+  --heading:        "Playfair Display", "EB Garamond", Georgia, serif;
   --body:           "EB Garamond", Georgia, "Iowan Old Style", serif;
   --mono:           "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --max-w: 42rem;
+  --max-w: 44rem;
 
   /* ---- dark theme (default) ---- */
   --bg:          #0B0710;
@@ -58,13 +59,44 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 
 img { max-width: 100%; display: block; }
 
+/* ---------- decorative background monogram (large screens only) ---------- */
+/* Purely aesthetic — fills the wide-screen negative space intentionally
+   rather than leaving it looking empty. Fixed, non-interactive, very
+   low opacity so it never competes with the actual content. */
+
+body::before {
+  content: "D";
+  position: fixed;
+  top: 50%;
+  right: 3vw;
+  transform: translateY(calc(-50% + var(--monogram-shift, 0px)));
+  font-family: var(--display-script);
+  font-size: min(42vw, 32rem);
+  color: var(--accent);
+  opacity: 0.045;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  will-change: transform;
+}
+
+.site-header, main, .site-footer { position: relative; z-index: 1; }
+
+@media (max-width: 75rem) {
+  body::before { display: none; }
+}
+
 /* ---------- header ---------- */
 
 .site-header {
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-header-inner {
   max-width: var(--max-w);
   margin: 0 auto;
   padding: 3.5rem 1.5rem 2rem;
-  border-bottom: 1px solid var(--rule);
 }
 
 .header-top {
@@ -81,7 +113,7 @@ img { max-width: 100%; display: block; }
 }
 
 .wordmark {
-  font-family: var(--display-caps);
+  font-family: var(--wordmark-caps);
   font-size: 2.35rem;
   color: var(--ink);
   white-space: nowrap;
@@ -166,10 +198,13 @@ main {
 }
 
 .site-footer {
+  border-top: 1px solid var(--rule);
+}
+
+.site-footer-inner {
   max-width: var(--max-w);
   margin: 0 auto;
   padding: 2.5rem 1.5rem 4rem;
-  border-top: 1px solid var(--rule);
   font-family: var(--mono);
   font-size: 0.78rem;
   color: var(--ink-soft);
@@ -182,7 +217,7 @@ main {
 /* ---------- home ---------- */
 
 .home-intro {
-  font-family: var(--display-caps);
+  font-family: var(--heading);
   font-weight: 400;
   font-size: 1.35rem;
   line-height: 1.6;
@@ -255,7 +290,7 @@ main {
 .list-header { margin-bottom: 2.5rem; }
 
 .list-header h1 {
-  font-family: var(--display-caps);
+  font-family: var(--heading);
   font-weight: 500;
   letter-spacing: 0.02em;
   font-size: 2rem;
@@ -278,7 +313,7 @@ article.essay .article-head,
 
 article.essay h1,
 .prose-page h1 {
-  font-family: var(--display-caps);
+  font-family: var(--heading);
   font-weight: 500;
   letter-spacing: 0.015em;
   font-size: 2.15rem;
@@ -296,7 +331,7 @@ article.essay h1,
 
 article.essay .content > p:first-of-type::first-letter,
 .prose-page .content > p:first-of-type::first-letter {
-  font-family: var(--display-caps);
+  font-family: var(--heading);
   font-size: 3.2rem;
   float: left;
   line-height: 0.75;
@@ -315,7 +350,7 @@ article.essay .content > p:first-of-type::first-letter,
 }
 
 .content h2 {
-  font-family: var(--display-caps);
+  font-family: var(--heading);
   font-weight: 500;
   letter-spacing: 0.02em;
   font-size: 1.3rem;
@@ -323,7 +358,7 @@ article.essay .content > p:first-of-type::first-letter,
   color: var(--accent);
 }
 .content h3 {
-  font-family: var(--display-caps);
+  font-family: var(--heading);
   font-weight: 500;
   font-size: 1.05rem;
   margin: 2.2rem 0 0.9rem;
@@ -472,4 +507,26 @@ article.essay .content > p:first-of-type::first-letter,
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* ---------- scroll reveal ---------- */
+/* Elements start slightly lowered and transparent; js/main.js adds
+   .visible via IntersectionObserver the first time each one scrolls
+   into view. Under prefers-reduced-motion, main.js skips the
+   animation entirely and everything is just visible immediately. */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
 }

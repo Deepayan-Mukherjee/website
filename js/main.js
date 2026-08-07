@@ -32,6 +32,73 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// ---------------------------------------------------------------
+// Scroll reveal. Applied automatically to page titles, section
+// headings, list rows, and gallery figures — no class="reveal"
+// needed in the HTML itself, so it works on every essay/poem/photo
+// page without editing each one by hand. Each element fades and
+// rises into place the first time it scrolls into view, then stays
+// put. Skipped entirely under reduced motion.
+// ---------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const selector = ".home-intro, .list-header, .article-head, .content h2, .entry-list li, .gallery figure";
+  const targets = document.querySelectorAll(selector);
+  if (!targets.length) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  targets.forEach((el) => el.classList.add("reveal"));
+
+  if (reduceMotion) {
+    targets.forEach((el) => el.classList.add("visible"));
+    return;
+  }
+
+  // Small stagger for consecutive list-style items so they don't
+  // all pop in at once.
+  let staggerIndex = 0;
+  targets.forEach((el) => {
+    if (el.matches(".entry-list li, .gallery figure")) {
+      el.style.transitionDelay = `${Math.min(staggerIndex * 60, 300)}ms`;
+      staggerIndex++;
+    }
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+  );
+
+  targets.forEach((el) => observer.observe(el));
+});
+
+// Faint background monogram drifts slower than the page scrolls —
+// a small parallax touch, purely decorative. No-ops if the element
+// isn't on the page, and does nothing under reduced motion.
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const shift = window.scrollY * 0.06;
+        document.documentElement.style.setProperty("--monogram-shift", `${shift}px`);
+        ticking = false;
+      });
+    },
+    { passive: true }
+  );
+});
+
 // Photograph lightbox: click a thumbnail on the Photographs page
 // to see it full-size; click again (or press Escape) to close.
 document.addEventListener("DOMContentLoaded", () => {
