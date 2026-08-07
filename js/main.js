@@ -68,28 +68,41 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!targets.length) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  targets.forEach((el) => el.classList.add("reveal"));
+
+  // Photographs dissolve; everything else fades and rises.
+  targets.forEach((el) => {
+    el.classList.add(el.matches(".gallery figure") ? "reveal-fade" : "reveal");
+  });
 
   if (reduceMotion) {
     targets.forEach((el) => el.classList.add("visible"));
     return;
   }
 
-  // Small stagger for consecutive list-style items so they don't
-  // all pop in at once.
-  let staggerIndex = 0;
-  targets.forEach((el) => {
-    if (el.matches(".entry-list li, .gallery figure")) {
-      el.style.transitionDelay = `${Math.min(staggerIndex * 60, 300)}ms`;
-      staggerIndex++;
-    }
+  // Cascade: rows within a given list reveal one after another, top to
+  // bottom. The counter resets per container, so each list (and the
+  // gallery) starts its own cascade from zero rather than inheriting a
+  // running total from earlier lists on the page.
+  document.querySelectorAll(".entry-list, .gallery").forEach((container) => {
+    const step = container.matches(".gallery") ? 110 : 85;
+    const rows = container.querySelectorAll(":scope > li, :scope > figure");
+    rows.forEach((row, i) => {
+      row.style.transitionDelay = `${Math.min(i * step, 700)}ms`;
+    });
   });
+
+  const remaining = new Set(targets);
+
+  const show = (el) => {
+    el.classList.add("visible");
+    remaining.delete(el);
+  };
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
+          show(entry.target);
           observer.unobserve(entry.target);
         }
       });
@@ -98,6 +111,35 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   targets.forEach((el) => observer.observe(el));
+
+  // IntersectionObserver alone misses anything the viewport jumps
+  // straight past — a fast flick, a TOC anchor link, or a reload
+  // partway down the page — leaving those elements stuck invisible.
+  // This sweep catches anything at or above the fold and reveals it.
+  const sweep = () => {
+    if (!remaining.size) return;
+    [...remaining].forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        show(el);
+        observer.unobserve(el);
+      }
+    });
+  };
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      sweep();
+      ticking = false;
+    });
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  sweep();
 });
 
 // Faint background monogram drifts slower than the page scrolls —
