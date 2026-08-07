@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ticking = true;
       requestAnimationFrame(() => {
         const shift = window.scrollY * 0.12;
-        document.documentElement.style.setProperty("--pattern-shift", `${shift}px`);
+        document.documentElement.style.setProperty("--monogram-shift", `${shift}px`);
         ticking = false;
       });
     },

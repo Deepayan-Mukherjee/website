@@ -185,7 +185,7 @@ PAGE = """<!DOCTYPE html>
     </div>
   </footer>
 
-  <script src="../js/main.js?v=24"></script>
+  <script src="../js/main.js?v=25"></script>
 </body>
 </html>
 """
