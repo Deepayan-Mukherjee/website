@@ -244,7 +244,7 @@ def main():
         return
     PAGES.mkdir(exist_ok=True)
 
-    created = skipped = 0
+    created = updated = skipped = 0
     files = sorted(p for p in IMAGES.iterdir() if p.is_file())
     print(f"scanning {IMAGES.relative_to(ROOT)}/ — {len(files)} file(s) found")
 
@@ -263,10 +263,17 @@ def main():
                   f".jpg and re-upload, or the page will show a broken image.")
 
         page = PAGES / f"{img.stem}.html"
+
+        # A page that exists but no longer carries the generated-by marker
+        # has been adopted by hand — never touch it again.
         if page.exists():
-            print(f"    {img.name}: page already exists, left alone")
-            skipped += 1
-            continue
+            existing = page.read_text(encoding="utf-8")
+            if 'name="generated-by" content="generate_photo_pages"' not in existing:
+                print(f"    {img.name}: page was hand-edited, left alone")
+                skipped += 1
+                continue
+        else:
+            existing = None
 
         side = read_sidecar(img)
 
@@ -285,20 +292,30 @@ def main():
         caption_block = (f'      <div class="content">\n        <p>{esc(caption)}</p>\n'
                          f'      </div>\n') if caption else ""
 
-        page.write_text(PAGE.format(
+        rendered = PAGE.format(
             title=esc(title),
             iso=iso,
             human=human_date(iso),
             filename=img.name,
             caption_block=caption_block,
-        ), encoding="utf-8")
-        print(f"  created photographs/{page.name}  ({title}, {iso})")
-        created += 1
+        )
+
+        if existing is None:
+            page.write_text(rendered, encoding="utf-8")
+            print(f"  created photographs/{page.name}  ({title}, {iso})")
+            created += 1
+        elif existing != rendered:
+            page.write_text(rendered, encoding="utf-8")
+            print(f"  updated photographs/{page.name}  ({title}, {iso})")
+            updated += 1
+        else:
+            skipped += 1
 
     image_names = {p.name for p in files if p.suffix.lower() in IMAGE_EXTS}
     removed = prune_orphans(image_names)
 
-    print(f"photo pages: {created} created, {skipped} already existed, {removed} removed")
+    print(f"photo pages: {created} created, {updated} updated, "
+          f"{skipped} unchanged, {removed} removed")
 
 
 if __name__ == "__main__":

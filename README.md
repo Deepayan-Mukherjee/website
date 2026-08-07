@@ -84,19 +84,24 @@ Every field is optional; anything you leave out falls back to the rules
 above. Captions can wrap across lines like the example — they get
 joined back together.
 
-Once a page has been generated it's never regenerated, so you can
-hand-edit `photographs/<name>.html` freely and the script will leave it
-alone from then on.
+You can add or change a sidecar at any time — before or after the image
+goes up. The page is regenerated whenever its title, date or caption
+changes, so adding a `.txt` later works exactly as well as having it
+there from the start.
 
-**Deleting a photo** is just as simple: remove the image from
-`images/photographs/` and push. Its page is deleted automatically and
-it disappears from the gallery. (Delete the `.txt` sidecar too, if it
-had one.)
+**If you want to edit a photo page by hand**, delete the line
+`<meta name="generated-by" content="generate_photo_pages">` from it.
+That marks the page as yours, and the script stops touching it —
+no more regenerating from the sidecar, and it will never be
+auto-deleted either.
 
-The one exception is a page the script didn't generate — if you wrote
-or heavily edited one by hand, it's never auto-deleted. Instead the
-build log prints a warning telling you the image is missing, and you
-can delete the page yourself. That way nothing you wrote can vanish
+**Deleting a photo**: remove the image from `images/photographs/` and
+push. Its page is deleted automatically and it disappears from the
+gallery. (Delete the `.txt` sidecar too, if it had one.)
+
+The exception is again a page you've adopted by hand — that's never
+auto-deleted. The build log prints a warning that its image is missing
+and leaves the file for you to remove, so nothing you wrote can vanish
 because a file got renamed.
 
 ## How the auto-indexing works
