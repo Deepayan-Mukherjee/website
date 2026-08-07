@@ -169,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toc.appendChild(list);
 
     content.parentNode.insertBefore(toc, content);
+    article.classList.add("has-toc");
   }
 
   // --- reading progress bar, fills as you scroll through the article ---

@@ -318,6 +318,12 @@ main {
 
 /* ---------- single essay / page ---------- */
 
+article.essay,
+.prose-page {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
 article.essay .article-head,
 .prose-page .article-head {
   margin-bottom: 2.5rem;
@@ -351,7 +357,7 @@ article.essay .content > p:first-of-type::first-letter,
   color: var(--accent);
 }
 
-.content p { margin: 0 0 1.55rem; max-width: 38rem; }
+.content p { margin: 0 0 1.55rem; }
 
 .content p.lede {
   font-family: var(--body);
@@ -381,12 +387,10 @@ article.essay .content > p:first-of-type::first-letter,
   border-left: 2px solid var(--accent);
   font-style: italic;
   color: var(--ink-soft);
-  max-width: 38rem;
 }
 .content hr { border: none; border-top: 1px solid var(--rule); margin: 2.8rem 0; }
 .content code { font-family: var(--mono); font-size: 0.9em; background: var(--bg-raised); padding: 0.1em 0.35em; border-radius: 3px; }
 .content strong { color: var(--ink); }
-.content ul, .content ol { max-width: 38rem; }
 
 /* ---------- reading aids ---------- */
 
@@ -409,6 +413,31 @@ article.essay .content > p:first-of-type::first-letter,
   background: var(--bg-raised);
   border: 1px solid var(--rule);
   border-radius: 2px;
+}
+
+/* On wide screens the contents list moves out beside the text as a
+   sticky sidebar — that's what makes the extra page width useful,
+   rather than leaving a dead margin. Below this width it falls back
+   to sitting inline above the essay. */
+@media (min-width: 68rem) {
+  article.essay.has-toc {
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+  }
+  article.essay.has-toc .toc {
+    position: sticky;
+    top: 2.5rem;
+    float: left;
+    width: 14rem;
+    margin: 0 0 2rem -17rem;
+    background: none;
+    border: none;
+    border-left: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 0 0 0 1.1rem;
+  }
 }
 
 .toc-label {
@@ -515,8 +544,20 @@ article.essay .content > p:first-of-type::first-letter,
   .wordmark { font-size: 1.7rem; }
   article.essay h1, .prose-page h1 { font-size: 1.7rem; }
   .home-intro { font-size: 1.15rem; }
-  .entry-list li { flex-wrap: wrap; }
-  .entry-kind { margin-left: 0; }
+  .entry-list li {
+    display: block;
+    padding: 1rem 0;
+  }
+  .entry-date {
+    display: block;
+    width: auto;
+    margin-bottom: 0.2rem;
+  }
+  .entry-title { font-size: 1.1rem; }
+  .entry-kind {
+    display: block;
+    margin: 0.3rem 0 0;
+  }
   .content p.lede { font-size: 1.12rem; }
   .header-top { flex-direction: row; align-items: center; }
   .theme-toggle { margin-top: 0; }
