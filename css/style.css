@@ -99,30 +99,39 @@ body::before {
 }
 
 .site-header-inner {
+  position: relative;
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 3.5rem 1.5rem 2rem;
+  padding: 1.6rem 1.5rem 1.2rem;
+  display: flex;
+  justify-content: center;
 }
 
-.header-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
+body.is-home .site-header-inner {
+  padding: 2.5rem 1.5rem 1.8rem;
 }
 
 .site-mark {
   border: none;
   text-decoration: none;
   line-height: 1;
+  display: inline-block;
 }
 
+/* Interior pages get a modest masthead — the name is a header, not
+   a cover. The homepage keeps the full-size version below. */
 .wordmark {
   font-family: var(--wordmark-caps);
-  font-size: 2.35rem;
+  font-size: clamp(1.4rem, 3.2vw, 3.1rem);
   color: var(--ink);
   white-space: nowrap;
+  display: inline-block;
+}
+
+/* Homepage: full-size, scales with the viewport to fill the band. */
+body.is-home .wordmark {
+  font-size: clamp(1.6rem, 7.2vw, 8rem);
 }
 
 .wordmark .initial {
@@ -142,8 +151,9 @@ body::before {
 }
 
 .theme-toggle {
-  flex: none;
-  margin-top: 0.4rem;
+  position: absolute;
+  top: 1.6rem;
+  right: 1.5rem;
   background: none;
   border: 1px solid var(--rule-strong);
   border-radius: 999px;
@@ -157,22 +167,41 @@ body::before {
   transition: border-color 150ms ease, color 150ms ease;
 }
 
+body.is-home .theme-toggle { top: 2.5rem; }
+
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
-.site-tagline {
-  margin: 1rem 0 0;
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
+/* ---- nav: sits below the header rule, centered, and spans exactly
+   the width of the name above it. js/main.js measures the wordmark
+   and writes --name-width; the max-width below is the no-JS
+   fallback. ---- */
 
 nav.site-nav {
-  margin: 1.75rem 0 0;
+  width: 100%;
+  flex: none;
   display: flex;
-  gap: 1.6rem;
+  justify-content: center;
+  padding: 1.1rem 1.5rem 0;
+}
+
+body.is-home nav.site-nav { padding: 1.4rem 1.5rem 0; }
+
+/* Interior pages: comfortable natural spacing, centered. */
+.site-nav-inner {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 2.4rem;
+  max-width: 100%;
   flex-wrap: wrap;
+}
+
+/* Homepage: spans exactly the width of the large name above it.
+   js/main.js measures the wordmark and writes --name-width. */
+body.is-home .site-nav-inner {
+  justify-content: space-between;
+  gap: 1rem;
+  width: var(--name-width, auto);
 }
 
 nav.site-nav a {
@@ -184,10 +213,14 @@ nav.site-nav a {
   color: var(--ink-soft);
   padding-bottom: 0.2rem;
   border-bottom: 1px solid transparent;
-  margin-right: 1.6rem;
+  white-space: nowrap;
 }
 
-nav.site-nav a:last-child { margin-right: 0; }
+nav.site-nav a:hover,
+nav.site-nav a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
 
 nav.site-nav a:hover,
 nav.site-nav a.active {
@@ -541,9 +574,18 @@ article.essay .content > p:first-of-type::first-letter,
 
 @media (max-width: 30rem) {
   body { font-size: 17px; }
-  .wordmark { font-size: 1.7rem; }
   article.essay h1, .prose-page h1 { font-size: 1.7rem; }
   .home-intro { font-size: 1.15rem; }
+  .site-header-inner { padding: 3.6rem 1rem 1.4rem; }
+  .theme-toggle { top: 1rem; right: 1rem; }
+  nav.site-nav { padding: 1.1rem 1rem 0; }
+  .site-nav-inner {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
+  }
+  nav.site-nav a { font-size: 0.74rem; }
   .entry-list li {
     display: block;
     padding: 1rem 0;
@@ -559,8 +601,6 @@ article.essay .content > p:first-of-type::first-letter,
     margin: 0.3rem 0 0;
   }
   .content p.lede { font-size: 1.12rem; }
-  .header-top { flex-direction: row; align-items: center; }
-  .theme-toggle { margin-top: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

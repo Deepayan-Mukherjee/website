@@ -8,6 +8,28 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
+// The nav below the header spans exactly the width of the name
+// above it. The name's font-size is fluid (vw-based), so measure it
+// after fonts load and re-measure on resize.
+document.addEventListener("DOMContentLoaded", () => {
+  const wordmark = document.querySelector(".wordmark");
+  if (!wordmark) return;
+
+  const sync = () => {
+    const w = wordmark.getBoundingClientRect().width;
+    if (w > 0) {
+      document.documentElement.style.setProperty("--name-width", `${Math.round(w)}px`);
+    }
+  };
+
+  sync();
+  // fonts change the measured width once they finish loading
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(sync);
+  }
+  window.addEventListener("resize", sync, { passive: true });
+});
+
 // Dark/light toggle. The no-flash inline script in <head> sets the
 // initial state before paint; this just wires up the button and
 // remembers the choice for next visit.
