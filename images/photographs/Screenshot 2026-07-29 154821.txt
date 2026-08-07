@@ -1,1 +1,4 @@
-This is a test caption. Here in this image we see dominoes standing upright. Holding in them potential enery
+title: Dominoes
+date: 2026-08-07
+caption: Here we see a series of dominoes
+         standing upright. They have potential.
