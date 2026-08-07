@@ -88,6 +88,17 @@ Once a page has been generated it's never regenerated, so you can
 hand-edit `photographs/<name>.html` freely and the script will leave it
 alone from then on.
 
+**Deleting a photo** is just as simple: remove the image from
+`images/photographs/` and push. Its page is deleted automatically and
+it disappears from the gallery. (Delete the `.txt` sidecar too, if it
+had one.)
+
+The one exception is a page the script didn't generate — if you wrote
+or heavily edited one by hand, it's never auto-deleted. Instead the
+build log prints a warning telling you the image is missing, and you
+can delete the page yourself. That way nothing you wrote can vanish
+because a file got renamed.
+
 ## How the auto-indexing works
 
 `scripts/build_index.py` scans `essays/`, `poetry/`, and

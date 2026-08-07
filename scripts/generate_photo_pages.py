@@ -45,7 +45,10 @@ ROOT = Path(__file__).resolve().parent.parent
 IMAGES = ROOT / "images" / "photographs"
 PAGES = ROOT / "photographs"
 
-IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
+IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif",
+              ".heic", ".heif", ".tif", ".tiff", ".bmp", ".jfif"}
+# Formats browsers can't display, even though we can read them.
+UNSUPPORTED_IN_BROWSER = {".heic", ".heif", ".tif", ".tiff"}
 DATE_PREFIX = re.compile(r"^(\d{4})-(\d{2})-(\d{2})[-_]?(.*)$")
 
 
@@ -132,6 +135,8 @@ PAGE = """<!DOCTYPE html>
   <meta name="post-date" content="{iso}">
   <meta name="post-kind" content="photograph">
   <meta name="post-image" content="../images/photographs/{filename}">
+  <meta name="generated-by" content="generate_photo_pages">
+  <meta name="source-image" content="{filename}">
   <link rel="stylesheet" href="../css/style.css?v=14">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -195,6 +200,44 @@ def human_date(iso: str) -> str:
         return iso
 
 
+def prune_orphans(existing_images: set) -> int:
+    """Remove generated pages whose image is gone.
+
+    Only touches pages carrying the generated-by marker, so a page you
+    wrote or edited by hand is never deleted — it just gets a warning.
+    """
+    removed = 0
+    for page in sorted(PAGES.glob("*.html")):
+        if page.name == "index.html":
+            continue
+        text = page.read_text(encoding="utf-8")
+
+        src_m = re.search(r'<meta\s+name="source-image"\s+content="([^"]+)"', text)
+        generated = 'name="generated-by" content="generate_photo_pages"' in text
+
+        if src_m:
+            source = src_m.group(1)
+        else:
+            # older/hand-written pages: fall back to the post-image path
+            img_m = re.search(r'<meta\s+name="post-image"\s+content="[^"]*?([^/"]+)"', text)
+            if not img_m:
+                continue
+            source = img_m.group(1)
+
+        if source in existing_images:
+            continue
+
+        if generated:
+            page.unlink()
+            print(f"  removed photographs/{page.name} — its image ({source}) is gone")
+            removed += 1
+        else:
+            print(f"  ! photographs/{page.name} points at {source}, which no longer "
+                  f"exists — left alone because it wasn't auto-generated. Delete it "
+                  f"yourself if you don't want it.")
+    return removed
+
+
 def main():
     if not IMAGES.is_dir():
         print("no images/photographs/ directory — nothing to do")
@@ -202,12 +245,26 @@ def main():
     PAGES.mkdir(exist_ok=True)
 
     created = skipped = 0
-    for img in sorted(IMAGES.iterdir()):
-        if img.suffix.lower() not in IMAGE_EXTS:
+    files = sorted(p for p in IMAGES.iterdir() if p.is_file())
+    print(f"scanning {IMAGES.relative_to(ROOT)}/ — {len(files)} file(s) found")
+
+    for img in files:
+        ext = img.suffix.lower()
+
+        if ext == ".txt":
+            continue  # sidecar, handled alongside its image
+
+        if ext not in IMAGE_EXTS:
+            print(f"  ! {img.name}: '{ext}' is not a recognised image extension — ignored")
             continue
+
+        if ext in UNSUPPORTED_IN_BROWSER:
+            print(f"  ! {img.name}: browsers can't display {ext} files. Convert it to "
+                  f".jpg and re-upload, or the page will show a broken image.")
 
         page = PAGES / f"{img.stem}.html"
         if page.exists():
+            print(f"    {img.name}: page already exists, left alone")
             skipped += 1
             continue
 
@@ -238,7 +295,10 @@ def main():
         print(f"  created photographs/{page.name}  ({title}, {iso})")
         created += 1
 
-    print(f"photo pages: {created} created, {skipped} already existed")
+    image_names = {p.name for p in files if p.suffix.lower() in IMAGE_EXTS}
+    removed = prune_orphans(image_names)
+
+    print(f"photo pages: {created} created, {skipped} already existed, {removed} removed")
 
 
 if __name__ == "__main__":

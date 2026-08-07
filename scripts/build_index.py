@@ -25,16 +25,22 @@ IMAGE_RE = re.compile(r'<meta\s+name="post-image"\s+content="([^"]+)"')
 
 def read_posts(folder: Path):
     posts = []
-    for f in sorted(folder.glob("*.html")):
-        if f.name == "index.html":
-            continue
+    if not folder.is_dir():
+        print(f"  ! {folder.name}/ does not exist")
+        return posts
+    candidates = [f for f in sorted(folder.glob("*.html")) if f.name != "index.html"]
+    print(f"  scanning {folder.name}/ — {len(candidates)} page(s)")
+    for f in candidates:
         text = f.read_text(encoding="utf-8")
         title_m = TITLE_RE.search(text)
         date_m = DATE_RE.search(text)
         kind_m = KIND_RE.search(text)
         image_m = IMAGE_RE.search(text)
         if not (title_m and date_m):
-            print(f"  skipping {f} — missing <title> or post-date meta tag")
+            missing = []
+            if not title_m: missing.append("<title>")
+            if not date_m: missing.append('<meta name="post-date">')
+            print(f"    ! SKIPPING {f.name} — missing {' and '.join(missing)}")
             continue
         posts.append({
             "title": title_m.group(1).strip(),
