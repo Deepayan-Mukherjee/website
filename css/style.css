@@ -138,8 +138,19 @@ body::before {
       transparent 1.5px calc(var(--rhomb-size) * 0.5));
   background-position: 0 var(--monogram-shift, 0px), 0 var(--monogram-shift, 0px);
   opacity: 0.22;
-  mask-image: radial-gradient(ellipse 85% 80% at 82% 45%, #000 0%, transparent 85%);
-  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 82% 45%, #000 0%, transparent 85%);
+  /* Full opacity out at the edges, fading to zero well before the
+     reading column — visible in the margins, gone behind the text.
+     Fixed rem-based stops (not vw) so the fade tracks the actual
+     content width rather than a fraction of whatever the screen
+     happens to be. */
+  mask-image: linear-gradient(to right,
+    #000 0, #000 8rem,
+    transparent calc(50% - 24rem), transparent calc(50% + 24rem),
+    #000 calc(100% - 8rem), #000 100%);
+  -webkit-mask-image: linear-gradient(to right,
+    #000 0, #000 8rem,
+    transparent calc(50% - 24rem), transparent calc(50% + 24rem),
+    #000 calc(100% - 8rem), #000 100%);
 }
 
 .site-header, main, .site-footer { position: relative; z-index: 1; }

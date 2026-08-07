@@ -16,18 +16,24 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!wordmark) return;
 
   const sync = () => {
-    const w = wordmark.getBoundingClientRect().width;
+    const w = Math.round(wordmark.getBoundingClientRect().width);
     if (w > 0) {
-      document.documentElement.style.setProperty("--name-width", `${Math.round(w)}px`);
+      document.documentElement.style.setProperty("--name-width", `${w}px`);
     }
   };
 
   sync();
-  // fonts change the measured width once they finish loading
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(sync);
   }
   window.addEventListener("resize", sync, { passive: true });
+
+  // Re-measure once the compact/expand transition finishes. Not on
+  // every frame of it (see the note on the sticky-header block below
+  // for why watching an element's own size and writing that back into
+  // layout-affecting CSS can loop) — just at the start and the end,
+  // which is enough to keep the nav's width honest without the risk.
+  wordmark.addEventListener("transitionend", sync);
 });
 
 // Sticky top bar: compacts once you've scrolled past the first
@@ -38,43 +44,52 @@ document.addEventListener("DOMContentLoaded", () => {
   const top = document.getElementById("site-top");
   if (!top) return;
 
+  // Deliberately NOT a ResizeObserver here. Observing #site-top's own
+  // size and writing that size back into a CSS variable that other
+  // elements' layout depends on (--top-h feeds the TOC's position and
+  // heading scroll-margins) can cause the observer to re-trigger
+  // itself — the resulting loop was the actual cause of a rapid
+  // flicker right around the compact-header threshold. transitionend
+  // fires exactly twice per state change (once per animated property)
+  // and can't retrigger itself, so it's used here instead.
   const publishHeight = () => {
     document.documentElement.style.setProperty(
       "--top-h", `${Math.round(top.getBoundingClientRect().height)}px`);
   };
+  publishHeight();
+  top.addEventListener("transitionend", publishHeight);
 
+  // Hysteresis: compacting shrinks the header by roughly 100px, which
+  // moves page content up underneath a fixed scroll position. With a
+  // single threshold that shift alone can cross back over the same
+  // line and toggle the class again. But hysteresis alone isn't
+  // enough — while the header is mid-transition, the browser fires
+  // dozens of scroll events on its own as content shifts under it
+  // (one scrollTo() call was measured firing 55 scroll events), and
+  // scrollY's meaning is itself in flux during that window. Locking
+  // the check out entirely until the transition finishes stops those
+  // synthetic in-between events from ever being evaluated at all.
   let ticking = false;
+  let transitioning = false;
+  top.addEventListener("transitionstart", () => { transitioning = true; });
+  top.addEventListener("transitionend", () => { transitioning = false; });
+
   const onScroll = () => {
-    if (ticking) return;
+    if (ticking || transitioning) return;
     ticking = true;
     requestAnimationFrame(() => {
-      top.classList.toggle("scrolled", window.scrollY > 60);
-      publishHeight();
+      const scrolled = top.classList.contains("scrolled");
+      if (!scrolled && window.scrollY > 160) {
+        top.classList.add("scrolled");
+      } else if (scrolled && window.scrollY < 40) {
+        top.classList.remove("scrolled");
+      }
       ticking = false;
     });
   };
 
-  publishHeight();
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", () => { publishHeight(); onScroll(); }, { passive: true });
-
-  // The compact transition changes the height while it runs, so keep
-  // re-measuring until it settles — otherwise --top-h lags behind and
-  // the TOC and anchor offsets are computed against a stale value.
-  let settling = null;
-  const trackUntilSettled = () => {
-    if (settling) cancelAnimationFrame(settling);
-    const deadline = performance.now() + 500;
-    const step = () => {
-      publishHeight();
-      if (performance.now() < deadline) settling = requestAnimationFrame(step);
-      else settling = null;
-    };
-    settling = requestAnimationFrame(step);
-  };
-  top.addEventListener("transitionstart", trackUntilSettled);
-  top.addEventListener("transitionend", publishHeight);
 });
 
 // Dark/light toggle. The no-flash inline script in <head> sets the
@@ -201,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Faint background monogram drifts slower than the page scrolls —
+// Faint background rhomboid grid drifts slower than the page scrolls —
 // a small parallax touch, purely decorative. No-ops if the element
 // isn't on the page, and does nothing under reduced motion.
 document.addEventListener("DOMContentLoaded", () => {
@@ -213,8 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const shift = window.scrollY * 0.06;
-        document.documentElement.style.setProperty("--monogram-shift", `${shift}px`);
+        const shift = window.scrollY * 0.12;
+        document.documentElement.style.setProperty("--pattern-shift", `${shift}px`);
         ticking = false;
       });
     },

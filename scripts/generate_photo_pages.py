@@ -137,7 +137,7 @@ PAGE = """<!DOCTYPE html>
   <meta name="post-image" content="../images/photographs/{filename}">
   <meta name="generated-by" content="generate_photo_pages">
   <meta name="source-image" content="{filename}">
-  <link rel="stylesheet" href="../css/style.css?v=18">
+  <link rel="stylesheet" href="../css/style.css?v=23">
   <link rel="preload" href="../fonts/pinyon-script.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/cinzel.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
@@ -185,7 +185,7 @@ PAGE = """<!DOCTYPE html>
     </div>
   </footer>
 
-  <script src="../js/main.js?v=18"></script>
+  <script src="../js/main.js?v=24"></script>
 </body>
 </html>
 """
