@@ -1,6 +1,0 @@
-title: Sample Photograph
-date: 2026-07-30
-caption: Replace this image with your own — drop a file into
-         images/photographs/ and a page like this one is generated
-         for it automatically. This caption comes from the matching
-         sample.txt sidecar; delete both when you add real photos.
