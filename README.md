@@ -23,10 +23,9 @@ photographs/
   sample-photograph.html       one photo's own page = one file
 images/
   photographs/                  the actual photo files go here
-icons/                        favicon + app icons (all sizes)
+favicon.png                   browser tab icon (128px)
 fonts/                        self-hosted webfonts (see below)
 partials/                     shared snippets injected into every page
-site.webmanifest              app icon metadata
 css/style.css                 all styling, one file
 js/main.js                    footer year, photo lightbox, reading aids
 scripts/build_index.py        rebuilds the listings above, run by CI
