@@ -30,6 +30,53 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", sync, { passive: true });
 });
 
+// Sticky top bar: compacts once you've scrolled past the first
+// stretch, and publishes its own height as --top-h so the table of
+// contents and anchor links can offset themselves correctly instead
+// of sliding underneath it.
+document.addEventListener("DOMContentLoaded", () => {
+  const top = document.getElementById("site-top");
+  if (!top) return;
+
+  const publishHeight = () => {
+    document.documentElement.style.setProperty(
+      "--top-h", `${Math.round(top.getBoundingClientRect().height)}px`);
+  };
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      top.classList.toggle("scrolled", window.scrollY > 60);
+      publishHeight();
+      ticking = false;
+    });
+  };
+
+  publishHeight();
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", () => { publishHeight(); onScroll(); }, { passive: true });
+
+  // The compact transition changes the height while it runs, so keep
+  // re-measuring until it settles — otherwise --top-h lags behind and
+  // the TOC and anchor offsets are computed against a stale value.
+  let settling = null;
+  const trackUntilSettled = () => {
+    if (settling) cancelAnimationFrame(settling);
+    const deadline = performance.now() + 500;
+    const step = () => {
+      publishHeight();
+      if (performance.now() < deadline) settling = requestAnimationFrame(step);
+      else settling = null;
+    };
+    settling = requestAnimationFrame(step);
+  };
+  top.addEventListener("transitionstart", trackUntilSettled);
+  top.addEventListener("transitionend", publishHeight);
+});
+
 // Dark/light toggle. The no-flash inline script in <head> sets the
 // initial state before paint; this just wires up the button and
 // remembers the choice for next visit.

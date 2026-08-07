@@ -137,7 +137,7 @@ PAGE = """<!DOCTYPE html>
   <meta name="post-image" content="../images/photographs/{filename}">
   <meta name="generated-by" content="generate_photo_pages">
   <meta name="source-image" content="{filename}">
-  <link rel="stylesheet" href="../css/style.css?v=15">
+  <link rel="stylesheet" href="../css/style.css?v=17">
   <link rel="preload" href="../fonts/pinyon-script.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/cinzel.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
@@ -149,23 +149,24 @@ PAGE = """<!DOCTYPE html>
 </head>
 <body id="top">
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a class="site-mark" href="../index.html">
-        <span class="wordmark"><span class="initial">D</span><span class="smallcaps">eepayan</span><span class="initial">M</span><span class="smallcaps">ukherjee</span></span>
-      </a>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">Light</button>
-    </div>
-  </header>
-
-  <nav class="site-nav">
-    <div class="site-nav-inner">
-      <a href="../essays/index.html">Essays</a>
-      <a href="../poetry/index.html">Poetry</a>
-      <a href="index.html" class="active">Photographs</a>
-      <a href="../about.html">About</a>
-    </div>
-  </nav>
+  <div class="site-top" id="site-top">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a class="site-mark" href="../">
+          <span class="wordmark"><span class="initial">D</span><span class="smallcaps">eepayan</span><span class="initial">M</span><span class="smallcaps">ukherjee</span></span>
+        </a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">Light</button>
+      </div>
+    </header>
+    <nav class="site-nav">
+      <div class="site-nav-inner">
+        <a href="../essays/">Essays</a>
+        <a href="../poetry/">Poetry</a>
+        <a href="./" class="active">Photographs</a>
+        <a href="../about.html">About</a>
+      </div>
+    </nav>
+  </div>
 
   <main>
     <article class="essay">
@@ -184,7 +185,7 @@ PAGE = """<!DOCTYPE html>
     </div>
   </footer>
 
-  <script src="../js/main.js?v=15"></script>
+  <script src="../js/main.js?v=17"></script>
 </body>
 </html>
 """

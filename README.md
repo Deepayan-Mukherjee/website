@@ -226,6 +226,19 @@ DNS changes can take a few minutes to a few hours to propagate. Once
 they do, GitHub Pages issues a free HTTPS certificate automatically —
 nothing for you to set up.
 
+## Clean URLs
+
+Links between pages never show `.html` or `index.html` in the address
+bar — `deepayanmukherjee.in/essays/why-i-write-here`, not
+`.../essays/why-i-write-here.html`. The files on disk still end in
+`.html` (so double-clicking one still opens correctly in a browser
+for local preview); only the *links* are written without the
+extension. This works because GitHub Pages automatically serves
+`/foo.html` when `/foo` is requested — no configuration needed, and
+nothing to maintain. `scripts/build_index.py` generates every list
+link this way automatically, so it applies to every essay, poem, and
+photo without you doing anything.
+
 ## Fonts
 
 All five fonts (Pinyon Script, Cinzel, Playfair Display, EB Garamond

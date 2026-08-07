@@ -141,6 +141,29 @@ body::before {
 
 /* ---------- header ---------- */
 
+/* ---- sticky top block ----
+   Header and nav travel together and stay pinned to the top. Once
+   you've scrolled past the first screen the whole thing compacts —
+   otherwise the homepage's full-size masthead would eat a third of
+   the viewport permanently. The blurred translucent background keeps
+   text from showing through as it passes underneath. */
+
+.site-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  transition: background-color 220ms ease;
+}
+
+/* Browsers without backdrop-filter get a solid background instead,
+   so the header never becomes unreadable. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-top { background: var(--bg); }
+}
+
 .site-header {
   width: 100%;
   flex: none;
@@ -152,13 +175,20 @@ body::before {
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 1.6rem 1.5rem 1.2rem;
+  padding: 2.5rem 1.5rem 1.8rem;
   display: flex;
   justify-content: center;
+  transition: padding 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-body.is-home .site-header-inner {
-  padding: 2.5rem 1.5rem 1.8rem;
+/* compacted state, toggled by js/main.js past ~60px of scroll */
+.site-top.scrolled .site-header-inner {
+  padding: 0.9rem 1.5rem 0.7rem;
+}
+
+.site-top.scrolled nav.site-nav {
+  padding-top: 0.65rem;
+  padding-bottom: 0.55rem;
 }
 
 .site-mark {
@@ -176,11 +206,19 @@ body.is-home .site-header-inner {
   color: var(--ink);
   white-space: nowrap;
   display: inline-block;
+  transition: font-size 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 /* Homepage: full-size, scales with the viewport to fill the band. */
 body.is-home .wordmark {
   font-size: clamp(1.6rem, 7.2vw, 8rem);
+}
+
+/* Once scrolled, both collapse to the same compact size so the
+   sticky bar stays out of the way while you're reading. */
+.site-top.scrolled .wordmark,
+body.is-home .site-top.scrolled .wordmark {
+  font-size: clamp(1.15rem, 2.1vw, 1.75rem);
 }
 
 .wordmark .initial {
@@ -254,21 +292,53 @@ body.is-home .site-nav-inner {
 }
 
 nav.site-nav a {
+  position: relative;
   border: none;
   font-family: var(--mono);
   font-size: 0.82rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  padding-bottom: 0.2rem;
-  border-bottom: 1px solid transparent;
+  padding-bottom: 0.3rem;
   white-space: nowrap;
+  transition: color 280ms ease, letter-spacing 280ms ease;
+}
+
+/* The underline is a pseudo-element scaled from the centre outwards,
+   rather than a border that just switches on — so it sweeps open on
+   hover and closes again on the way out. */
+nav.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 nav.site-nav a:hover,
-nav.site-nav a.active {
+nav.site-nav a:focus-visible {
   color: var(--accent);
-  border-bottom-color: var(--accent);
+  letter-spacing: 0.085em;
+}
+
+nav.site-nav a:hover::after,
+nav.site-nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* The current section stays lit, without the hover animation. */
+nav.site-nav a.active { color: var(--accent); }
+nav.site-nav a.active::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  nav.site-nav a { transition: color 280ms ease; }
+  nav.site-nav a:hover, nav.site-nav a:focus-visible { letter-spacing: 0.06em; }
+  nav.site-nav a::after { transition: none; }
 }
 
 nav.site-nav a:hover,
@@ -456,12 +526,14 @@ article.essay .content > p:first-of-type::first-letter,
   font-size: 1.3rem;
   margin: 3rem 0 1.1rem;
   color: var(--accent);
+  scroll-margin-top: calc(var(--top-h, 5rem) + 1.5rem);
 }
 .content h3 {
   font-family: var(--heading);
   font-weight: 500;
   font-size: 1.05rem;
   margin: 2.2rem 0 0.9rem;
+  scroll-margin-top: calc(var(--top-h, 5rem) + 1.5rem);
 }
 .content blockquote {
   margin: 2rem 0;
@@ -483,7 +555,7 @@ article.essay .content > p:first-of-type::first-letter,
   height: 3px;
   width: 0%;
   background: var(--accent);
-  z-index: 60;
+  z-index: 45;
   transition: width 80ms linear;
 }
 
@@ -510,7 +582,7 @@ article.essay .content > p:first-of-type::first-letter,
   }
   article.essay.has-toc .toc {
     position: sticky;
-    top: 2.5rem;
+    top: calc(var(--top-h, 5rem) + 2rem);
     float: left;
     width: 14rem;
     margin: 0 0 2rem -17rem;

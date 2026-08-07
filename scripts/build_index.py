@@ -60,11 +60,19 @@ def fmt_date(iso: str) -> str:
         return iso
 
 
+def pretty_href(filename: str) -> str:
+    """Drop the .html for links — GitHub Pages resolves /foo the same
+    as /foo.html automatically, so this just keeps the address bar
+    clean. The actual file on disk keeps its .html extension; only
+    the link text changes."""
+    return filename[:-5] if filename.endswith(".html") else filename
+
+
 def render_section_li(post, href_prefix=""):
     return (
         '      <li>\n'
         f'        <span class="entry-date">{fmt_date(post["date"])}</span>\n'
-        f'        <a class="entry-title" href="{href_prefix}{post["filename"]}">{post["title"]}</a>\n'
+        f'        <a class="entry-title" href="{href_prefix}{pretty_href(post["filename"])}">{post["title"]}</a>\n'
         '      </li>'
     )
 
@@ -73,7 +81,7 @@ def render_home_li(post, href_prefix):
     return (
         '      <li>\n'
         f'        <span class="entry-date">{fmt_date(post["date"])}</span>\n'
-        f'        <a class="entry-title" href="{href_prefix}{post["filename"]}">{post["title"]}</a>\n'
+        f'        <a class="entry-title" href="{href_prefix}{pretty_href(post["filename"])}">{post["title"]}</a>\n'
         f'        <span class="entry-kind">{post["kind"]}</span>\n'
         '      </li>'
     )
@@ -86,7 +94,7 @@ def render_photo_figure(post):
         f'        <a class="gallery-link" href="{image}" data-page="{post["filename"]}">\n'
         f'          <img src="{image}" alt="{post["title"]}" loading="lazy">\n'
         '        </a>\n'
-        f'        <figcaption><a href="{post["filename"]}">{post["title"]}</a> · {fmt_date(post["date"])}</figcaption>\n'
+        f'        <figcaption><a href="{pretty_href(post["filename"])}">{post["title"]}</a> · {fmt_date(post["date"])}</figcaption>\n'
         '      </figure>'
     )
 

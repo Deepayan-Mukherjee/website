@@ -9,7 +9,7 @@
   <link rel="icon" href="../icons/favicon-16.png" sizes="16x16" type="image/png">
   <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
   <link rel="manifest" href="../site.webmanifest">
-  <link rel="stylesheet" href="../css/style.css?v=15">
+  <link rel="stylesheet" href="../css/style.css?v=17">
   <link rel="preload" href="../fonts/pinyon-script.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/cinzel.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
@@ -21,23 +21,24 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a class="site-mark" href="../index.html">
-        <span class="wordmark"><span class="initial">D</span><span class="smallcaps">eepayan</span><span class="initial">M</span><span class="smallcaps">ukherjee</span></span>
-      </a>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">Light</button>
-    </div>
-  </header>
-
-  <nav class="site-nav">
-    <div class="site-nav-inner">
-      <a href="../essays/index.html">Essays</a>
-      <a href="index.html" class="active">Poetry</a>
-      <a href="../photographs/index.html">Photographs</a>
-      <a href="../about.html">About</a>
-    </div>
-  </nav>
+  <div class="site-top" id="site-top">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a class="site-mark" href="../">
+          <span class="wordmark"><span class="initial">D</span><span class="smallcaps">eepayan</span><span class="initial">M</span><span class="smallcaps">ukherjee</span></span>
+        </a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">Light</button>
+      </div>
+    </header>
+    <nav class="site-nav">
+      <div class="site-nav-inner">
+        <a href="../essays/">Essays</a>
+        <a href="./" class="active">Poetry</a>
+        <a href="../photographs/">Photographs</a>
+        <a href="../about.html">About</a>
+      </div>
+    </nav>
+  </div>
 
   <main>
     <div class="list-header">
@@ -49,7 +50,7 @@
       <!-- AUTO-INDEX:poetry -->
       <li>
         <span class="entry-date">Jul 2026</span>
-        <a class="entry-title" href="a-placeholder.html">A Placeholder</a>
+        <a class="entry-title" href="a-placeholder">A Placeholder</a>
       </li>
       <!-- /AUTO-INDEX -->
       <!-- Don't hand-edit between the markers above — see README.md. -->
@@ -63,6 +64,6 @@
     </div>
   </footer>
 
-  <script src="../js/main.js?v=15"></script>
+  <script src="../js/main.js?v=17"></script>
 </body>
 </html>
