@@ -311,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const shift = window.scrollY * 0.12;
+        const shift = window.scrollY * -0.12;
         document.documentElement.style.setProperty("--monogram-shift", `${shift}px`);
         ticking = false;
       });
