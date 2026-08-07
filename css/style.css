@@ -144,13 +144,13 @@ body::before {
      content width rather than a fraction of whatever the screen
      happens to be. */
   mask-image: linear-gradient(to right,
-  #000 0, transparent 20rem,
-  transparent calc(50% - 4rem), transparent calc(50% + 4rem),
-  transparent calc(100% - 20rem), #000 100%);
+  #000 0, #000 16rem,
+  transparent calc(50% - 6rem), transparent calc(50% + 6rem),
+  #000 calc(100% - 16rem), #000 100%);
   -webkit-mask-image: linear-gradient(to right,
-    #000 0, transparent 20rem,
-  transparent calc(50% - 4rem), transparent calc(50% + 4rem),
-  transparent calc(100% - 20rem), #000 100%);
+    #000 0, #000 16rem,
+  transparent calc(50% - 6rem), transparent calc(50% + 6rem),
+  #000 calc(100% - 16rem), #000 100%);
 }
 
 .site-header, main, .site-footer { position: relative; z-index: 1; }
