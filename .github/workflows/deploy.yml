@@ -26,6 +26,12 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install Pillow (for reading photo EXIF dates)
+        run: pip install --quiet Pillow
+
+      - name: Generate pages for any new photographs
+        run: python3 scripts/generate_photo_pages.py
+
       - name: Rebuild index listings from post metadata
         run: python3 scripts/build_index.py
 
