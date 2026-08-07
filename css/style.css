@@ -613,12 +613,23 @@ article.essay .content > p:first-of-type::first-letter,
    into view. Under prefers-reduced-motion, main.js skips the
    animation entirely and everything is just visible immediately. */
 
+/* Movement and fade run at different speeds on purpose: the element
+   travels into place fairly quickly with a slight overshoot (so it
+   "snaps" and settles), while the opacity keeps fading in more slowly
+   behind it. */
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1),
-              transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform: translateY(28px);
+  transition: opacity 1500ms ease,
+              transform 850ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
+
+/* Applied for one frame while the element is first hidden. Without
+   this the browser transitions opacity 1 -> 0 over the full duration,
+   so the element never actually reaches 0 before we reveal it — and
+   the fade-in is invisible. */
+.reveal.no-anim,
+.reveal-fade.no-anim { transition: none !important; }
 
 .reveal.visible {
   opacity: 1;
@@ -626,18 +637,18 @@ article.essay .content > p:first-of-type::first-letter,
 }
 
 /* Photographs fade rather than rise — images sliding upward reads as
-   jumpy, a straight dissolve suits them better. Slightly slower, with
-   a touch of scale so they settle rather than blink on. */
+   jumpy, a straight dissolve suits them better. Slower still, with a
+   touch of scale so they settle rather than blink on. */
 .reveal-fade {
   opacity: 0;
-  transform: scale(1.015);
-  transition: opacity 900ms ease,
-              transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform: translateY(18px) scale(1.012);
+  transition: opacity 1900ms ease,
+              transform 1000ms cubic-bezier(0.34, 1.28, 0.64, 1);
 }
 
 .reveal-fade.visible {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0) scale(1);
 }
 
 @media (prefers-reduced-motion: reduce) {

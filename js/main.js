@@ -69,9 +69,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Photographs dissolve; everything else fades and rises.
+  // Photographs dissolve; everything else fades and rises. The
+  // .no-anim class hides them instantly for one frame — otherwise the
+  // browser would animate opacity 1 -> 0 over the full duration and the
+  // element would never actually reach 0 before being revealed.
   targets.forEach((el) => {
-    el.classList.add(el.matches(".gallery figure") ? "reveal-fade" : "reveal");
+    el.classList.add(el.matches(".gallery figure") ? "reveal-fade" : "reveal", "no-anim");
   });
 
   if (reduceMotion) {
@@ -84,10 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // gallery) starts its own cascade from zero rather than inheriting a
   // running total from earlier lists on the page.
   document.querySelectorAll(".entry-list, .gallery").forEach((container) => {
-    const step = container.matches(".gallery") ? 110 : 85;
+    const step = container.matches(".gallery") ? 260 : 200;
     const rows = container.querySelectorAll(":scope > li, :scope > figure");
     rows.forEach((row, i) => {
-      row.style.transitionDelay = `${Math.min(i * step, 700)}ms`;
+      row.style.transitionDelay = `${Math.min(i * step, 1600)}ms`;
     });
   });
 
@@ -139,7 +142,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
-  sweep();
+
+  // Sequence matters: the hidden state must actually paint before the
+  // transition is armed, and the transition must be armed before
+  // anything is revealed. Otherwise no fade is ever seen.
+  requestAnimationFrame(() => {
+    void document.body.offsetHeight;             // hidden state painted
+    targets.forEach((el) => el.classList.remove("no-anim")); // arm fade
+    void document.body.offsetHeight;
+    requestAnimationFrame(sweep);                // now reveal
+  });
 });
 
 // Faint background monogram drifts slower than the page scrolls —
