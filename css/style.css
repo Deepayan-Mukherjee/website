@@ -11,7 +11,7 @@
   --heading:        "Playfair Display", "EB Garamond", Georgia, serif;
   --body:           "EB Garamond", Georgia, "Iowan Old Style", serif;
   --mono:           "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --max-w: 44rem;
+  --max-w: 70rem;
 
   /* ---- dark theme (default) ---- */
   --bg:          #0B0710;
@@ -223,7 +223,7 @@ main {
   line-height: 1.6;
   color: var(--ink);
   margin: 0 0 3.5rem;
-  max-width: 34rem;
+  max-width: 40rem;
   letter-spacing: 0.01em;
 }
 
@@ -369,6 +369,7 @@ article.essay .content > p:first-of-type::first-letter,
   border-left: 2px solid var(--accent);
   font-style: italic;
   color: var(--ink-soft);
+  max-width: 38rem;
 }
 .content hr { border: none; border-top: 1px solid var(--rule); margin: 2.8rem 0; }
 .content code { font-family: var(--mono); font-size: 0.9em; background: var(--bg-raised); padding: 0.1em 0.35em; border-radius: 3px; }
@@ -451,6 +452,10 @@ article.essay .content > p:first-of-type::first-letter,
 
 .gallery { display: grid; grid-template-columns: 1fr; gap: 2.6rem; }
 .gallery figure { margin: 0; }
+
+@media (min-width: 40rem) {
+  .gallery { grid-template-columns: 1fr 1fr; gap: 2.6rem 2rem; }
+}
 
 .gallery img {
   border: 1px solid var(--rule);
