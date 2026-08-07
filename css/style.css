@@ -111,26 +111,35 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 
 img { max-width: 100%; display: block; }
 
-/* ---------- decorative background monogram (large screens only) ---------- */
-/* Purely aesthetic — fills the wide-screen negative space intentionally
-   rather than leaving it looking empty. Fixed, non-interactive, very
-   low opacity so it never competes with the actual content. */
+/* ---------- decorative background pattern (large screens only) ---------- */
+/* A faint rhomboid grid, fixed behind the content. Fills the
+   wide-screen negative space intentionally rather than leaving it
+   looking empty, and drifts slowly as you scroll for a subtle sense
+   of depth. Purely aesthetic, very low opacity, never competes with
+   actual content. Built from two crossed diagonal line grids —
+   where they overlap forms the diamond lattice — so it's plain CSS,
+   no image file, and automatically follows the accent color in both
+   themes with zero extra work. */
 
 body::before {
-  content: "D";
+  content: "";
   position: fixed;
-  top: 50%;
-  right: 3vw;
-  transform: translateY(calc(-50% + var(--monogram-shift, 0px)));
-  font-family: var(--display-script);
-  font-size: min(42vw, 32rem);
-  color: var(--accent);
-  opacity: 0.045;
-  line-height: 1;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
   user-select: none;
-  will-change: transform;
+  --rhomb-size: 88px;
+  background-image:
+    repeating-linear-gradient(60deg,
+      color-mix(in srgb, var(--accent) 65%, transparent) 0 1px,
+      transparent 1px calc(var(--rhomb-size) * 0.5)),
+    repeating-linear-gradient(-60deg,
+      color-mix(in srgb, var(--accent) 65%, transparent) 0 1px,
+      transparent 1px calc(var(--rhomb-size) * 0.5));
+  background-position: 0 var(--pattern-shift, 0px), 0 var(--pattern-shift, 0px);
+  opacity: 0.075;
+  mask-image: radial-gradient(ellipse 70% 60% at 78% 42%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 78% 42%, #000 0%, transparent 72%);
 }
 
 .site-header, main, .site-footer { position: relative; z-index: 1; }
