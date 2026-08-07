@@ -5,8 +5,57 @@
    calligraphic swash initial with a small-caps display serif.
    =========================================================== */
 
+/* ---- self-hosted fonts ----
+   Previously loaded from Google's CDN, which meant an extra DNS
+   lookup + connection + CSS fetch + font fetch, all sequential,
+   before the real fonts appeared — visible as a flash of a generic
+   fallback (especially bad for the wordmark, since nothing looks
+   like Pinyon Script's swash). Hosting the files ourselves removes
+   that round-trip entirely. Each file is subsetted to Latin +
+   punctuation only — 330KB total across all five. */
+
+@font-face {
+  font-family: "Pinyon Script";
+  src: url("../fonts/pinyon-script.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cinzel";
+  src: url("../fonts/cinzel.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("../fonts/playfair-display.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("../fonts/eb-garamond.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("../fonts/eb-garamond-italic.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
-  --display-script: "Pinyon Script", cursive;
+  --display-script: "Pinyon Script", "Brush Script MT", cursive;
   --wordmark-caps:  "Cinzel", serif;
   --heading:        "Playfair Display", "EB Garamond", Georgia, serif;
   --body:           "EB Garamond", Georgia, "Iowan Old Style", serif;

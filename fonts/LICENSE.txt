@@ -1,0 +1,14 @@
+Cinzel, EB Garamond, Playfair Display, and Pinyon Script are each
+licensed under the SIL Open Font License, Version 1.1.
+
+Full license text: https://openfontlicense.org
+
+Source (for updating or re-subsetting any of these):
+  https://github.com/google/fonts/tree/main/ofl/cinzel
+  https://github.com/google/fonts/tree/main/ofl/ebgaramond
+  https://github.com/google/fonts/tree/main/ofl/playfairdisplay
+  https://github.com/google/fonts/tree/main/ofl/pinyonscript
+
+The .woff2 files in this folder are subsetted (Latin characters and
+common punctuation only) from the originals to reduce file size —
+functionally identical for this site's purposes, just smaller.

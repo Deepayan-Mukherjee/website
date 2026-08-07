@@ -24,6 +24,7 @@ photographs/
 images/
   photographs/                  the actual photo files go here
 icons/                        favicon + app icons (all sizes)
+fonts/                        self-hosted webfonts (see below)
 site.webmanifest              app icon metadata
 css/style.css                 all styling, one file
 js/main.js                    footer year, photo lightbox, reading aids
@@ -224,6 +225,24 @@ www    CNAME    YOUR-USERNAME.github.io.
 DNS changes can take a few minutes to a few hours to propagate. Once
 they do, GitHub Pages issues a free HTTPS certificate automatically —
 nothing for you to set up.
+
+## Fonts
+
+All five fonts (Pinyon Script, Cinzel, Playfair Display, EB Garamond
+regular and italic) are self-hosted in `fonts/`, not loaded from
+Google's CDN. That used to mean an extra DNS lookup, connection, and
+two sequential fetches (Google's CSS, then the actual font file)
+before the real fonts appeared — visible as a flash of a generic
+fallback, which looked especially bad on the wordmark since nothing
+else looks like Pinyon Script's swash. Hosting the files ourselves
+removes that round-trip; the `<link rel="preload">` tags in each
+page's `<head>` tell the browser to start fetching them immediately,
+in parallel with everything else.
+
+Each file is subsetted to Latin characters and common punctuation
+only — 330KB total across all five. `fonts/LICENSE.txt` has the
+license (SIL OFL) and links to the originals, if you ever want to
+add a different weight or a second language's character set.
 
 ## Changing the design
 
