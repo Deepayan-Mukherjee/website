@@ -1,47 +1,60 @@
 /* ===========================================================
    Deepayan Mukherjee — personal writing site
-   Palette: parchment + oxblood + brass, inspired by old
-   hardcover bindings and annotated margins, not screens.
+   Artistic academic minimalism: near-black ink / warm ivory,
+   a muted-gold accent, and a hand-set wordmark pairing a
+   calligraphic swash initial with a small-caps display serif.
    =========================================================== */
 
 :root {
-  --parchment:      #EAE3D3;
-  --parchment-deep: #DDD3BC;
-  --ink:             #201C16;
-  --ink-soft:        #4A4438;
-  --oxblood:         #7A2E2A;
-  --oxblood-deep:    #5E2320;
-  --brass:           #A9843F;
-  --rule:            #C9BEA3;
+  --display-script: "Pinyon Script", cursive;
+  --display-caps:   "Cinzel", serif;
+  --body:           "EB Garamond", Georgia, "Iowan Old Style", serif;
+  --mono:           "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --max-w: 42rem;
 
-  --display: Georgia, "Iowan Old Style", "Palatino Linotype", "URW Palladio L", serif;
-  --body:    "Charter", "Iowan Old Style", Georgia, "Palatino Linotype", serif;
-  --mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* ---- dark theme (default) ---- */
+  --bg:          #0B0710;
+  --bg-raised:   #150E1F;
+  --ink:         #F3EEE8;
+  --ink-soft:    #B3A8BE;
+  --accent:      #C9A24A;
+  --accent-deep: #A9843B;
+  --rule:        rgba(211, 197, 224, 0.16);
+  --rule-strong: rgba(211, 197, 224, 0.28);
+  --shadow:      rgba(0, 0, 0, 0.4);
+}
+
+html[data-theme="light"] {
+  --bg:          #F7F2E9;
+  --bg-raised:   #EDE5D4;
+  --ink:         #1A1420;
+  --ink-soft:    #6B5F72;
+  --accent:      #8C6A24;
+  --accent-deep: #6E5119;
+  --rule:        rgba(26, 20, 32, 0.13);
+  --rule-strong: rgba(26, 20, 32, 0.24);
+  --shadow:      rgba(60, 45, 20, 0.1);
 }
 
 * { box-sizing: border-box; }
 
-html {
-  background: var(--parchment);
-}
+html { background: var(--bg); }
 
 body {
   margin: 0;
-  background:
-    radial-gradient(ellipse at top left, rgba(169,132,63,0.06), transparent 55%),
-    var(--parchment);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--body);
   font-size: 19px;
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition: background-color 220ms ease, color 220ms ease;
 }
 
-a { color: var(--oxblood); text-decoration: none; border-bottom: 1px solid rgba(122,46,42,0.35); }
-a:hover { border-bottom-color: var(--oxblood); }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+a:hover { border-bottom-color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 img { max-width: 100%; display: block; }
 
@@ -54,38 +67,62 @@ img { max-width: 100%; display: block; }
   border-bottom: 1px solid var(--rule);
 }
 
-.site-mark {
+.header-top {
   display: flex;
-  align-items: baseline;
-  gap: 0.9rem;
-  text-decoration: none;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-mark {
   border: none;
+  text-decoration: none;
+  line-height: 1;
 }
 
-.site-mark .glyph {
-  font-family: var(--display);
-  font-size: 2.1rem;
-  font-weight: 700;
-  color: var(--oxblood);
-  border: 1.5px solid var(--oxblood);
-  border-radius: 50%;
-  width: 2.6rem;
-  height: 2.6rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-}
-
-.site-mark .wordmark {
-  font-family: var(--display);
-  font-size: 1.55rem;
-  letter-spacing: 0.01em;
+.wordmark {
+  font-family: var(--display-caps);
+  font-size: 2.35rem;
   color: var(--ink);
+  white-space: nowrap;
 }
+
+.wordmark .initial {
+  font-family: var(--display-script);
+  font-size: 1.7em;
+  font-weight: 400;
+  color: var(--accent);
+  vertical-align: -0.08em;
+  padding: 0 0.02em;
+}
+
+.wordmark .smallcaps {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.62em;
+  font-weight: 500;
+}
+
+.theme-toggle {
+  flex: none;
+  margin-top: 0.4rem;
+  background: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
 .site-tagline {
-  margin: 0.6rem 0 0 3.5rem;
+  margin: 1rem 0 0;
   font-family: var(--mono);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
@@ -94,7 +131,7 @@ img { max-width: 100%; display: block; }
 }
 
 nav.site-nav {
-  margin: 1.75rem 0 0 3.5rem;
+  margin: 1.75rem 0 0;
   display: flex;
   gap: 1.6rem;
   flex-wrap: wrap;
@@ -109,12 +146,15 @@ nav.site-nav a {
   color: var(--ink-soft);
   padding-bottom: 0.2rem;
   border-bottom: 1px solid transparent;
+  margin-right: 1.6rem;
 }
+
+nav.site-nav a:last-child { margin-right: 0; }
 
 nav.site-nav a:hover,
 nav.site-nav a.active {
-  color: var(--oxblood);
-  border-bottom-color: var(--oxblood);
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
 /* ---------- main / footer ---------- */
@@ -142,22 +182,24 @@ main {
 /* ---------- home ---------- */
 
 .home-intro {
-  font-family: var(--display);
-  font-size: 1.5rem;
-  line-height: 1.55;
+  font-family: var(--display-caps);
+  font-weight: 400;
+  font-size: 1.35rem;
+  line-height: 1.6;
   color: var(--ink);
   margin: 0 0 3.5rem;
   max-width: 34rem;
+  letter-spacing: 0.01em;
 }
 
-.home-intro em { font-style: italic; color: var(--oxblood); }
+.home-intro em { font-style: normal; color: var(--accent); }
 
 .section-label {
   font-family: var(--mono);
   font-size: 0.78rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--accent);
   margin: 0 0 1.1rem;
   padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--rule);
@@ -189,39 +231,41 @@ main {
 }
 
 .entry-title {
-  font-family: var(--display);
-  font-size: 1.15rem;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 1.2rem;
   color: var(--ink);
   border: none;
 }
 
-.entry-title:hover { color: var(--oxblood); }
+.entry-title:hover { color: var(--accent); }
 
 .entry-kind {
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--accent);
   margin-left: auto;
   flex: none;
 }
 
 /* ---------- list pages ---------- */
 
-.list-header {
-  margin-bottom: 2.5rem;
-}
+.list-header { margin-bottom: 2.5rem; }
 
 .list-header h1 {
-  font-family: var(--display);
-  font-size: 2.1rem;
+  font-family: var(--display-caps);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  font-size: 2rem;
   margin: 0 0 0.5rem;
 }
 
 .list-header p {
   color: var(--ink-soft);
   font-style: italic;
+  font-family: var(--body);
   margin: 0;
 }
 
@@ -234,9 +278,11 @@ article.essay .article-head,
 
 article.essay h1,
 .prose-page h1 {
-  font-family: var(--display);
-  font-size: 2.3rem;
-  line-height: 1.2;
+  font-family: var(--display-caps);
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  font-size: 2.15rem;
+  line-height: 1.25;
   margin: 0 0 0.8rem;
 }
 
@@ -250,50 +296,51 @@ article.essay h1,
 
 article.essay .content > p:first-of-type::first-letter,
 .prose-page .content > p:first-of-type::first-letter {
-  font-family: var(--display);
-  font-size: 3.4rem;
+  font-family: var(--display-caps);
+  font-size: 3.2rem;
   float: left;
-  line-height: 0.8;
-  padding: 0.1rem 0.35rem 0 0;
-  color: var(--oxblood);
+  line-height: 0.75;
+  padding: 0.1rem 0.4rem 0 0;
+  color: var(--accent);
 }
 
 .content p { margin: 0 0 1.55rem; max-width: 38rem; }
 
 .content p.lede {
-  font-family: var(--display);
-  font-size: 1.28rem;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 1.26rem;
   line-height: 1.6;
   color: var(--ink);
 }
 
 .content h2 {
-  font-family: var(--display);
-  font-size: 1.4rem;
+  font-family: var(--display-caps);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  font-size: 1.3rem;
   margin: 3rem 0 1.1rem;
-  color: var(--oxblood-deep);
-  scroll-margin-top: 2rem;
+  color: var(--accent);
 }
 .content h3 {
-  font-family: var(--display);
-  font-size: 1.15rem;
+  font-family: var(--display-caps);
+  font-weight: 500;
+  font-size: 1.05rem;
   margin: 2.2rem 0 0.9rem;
-  scroll-margin-top: 2rem;
 }
 .content blockquote {
   margin: 2rem 0;
   padding: 0.2rem 0 0.2rem 1.3rem;
-  border-left: 3px solid var(--brass);
+  border-left: 2px solid var(--accent);
   font-style: italic;
   color: var(--ink-soft);
 }
 .content hr { border: none; border-top: 1px solid var(--rule); margin: 2.8rem 0; }
-.content code { font-family: var(--mono); font-size: 0.9em; background: var(--parchment-deep); padding: 0.1em 0.35em; border-radius: 3px; }
+.content code { font-family: var(--mono); font-size: 0.9em; background: var(--bg-raised); padding: 0.1em 0.35em; border-radius: 3px; }
 .content strong { color: var(--ink); }
-.content a { text-underline-offset: 3px; }
+.content ul, .content ol { max-width: 38rem; }
 
-/* ---------- reading aids: progress bar, table of contents, back-to-top ---------- */
-/* Injected/controlled by js/main.js — safe to ignore if you don't use it. */
+/* ---------- reading aids ---------- */
 
 .reading-progress {
   position: fixed;
@@ -301,22 +348,17 @@ article.essay .content > p:first-of-type::first-letter,
   left: 0;
   height: 3px;
   width: 0%;
-  background: var(--oxblood);
+  background: var(--accent);
   z-index: 60;
   transition: width 80ms linear;
 }
 
-.reading-meta {
-  display: flex;
-  gap: 0.9rem;
-  align-items: baseline;
-  flex-wrap: wrap;
-}
+.reading-meta { display: flex; gap: 0.9rem; align-items: baseline; flex-wrap: wrap; }
 
 .toc {
   margin: 0 0 2.6rem;
   padding: 1.1rem 1.3rem;
-  background: var(--parchment-deep);
+  background: var(--bg-raised);
   border: 1px solid var(--rule);
   border-radius: 2px;
 }
@@ -326,7 +368,7 @@ article.essay .content > p:first-of-type::first-letter,
   font-size: 0.72rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--accent);
   margin: 0 0 0.7rem;
 }
 
@@ -340,7 +382,7 @@ article.essay .content > p:first-of-type::first-letter,
 }
 
 .toc a { border: none; color: var(--ink-soft); }
-.toc a:hover { color: var(--oxblood); }
+.toc a:hover { color: var(--accent); }
 
 .back-to-top {
   display: inline-block;
@@ -355,35 +397,29 @@ article.essay .content > p:first-of-type::first-letter,
   padding-top: 1rem;
   width: 100%;
 }
-.back-to-top:hover { color: var(--oxblood); }
+.back-to-top:hover { color: var(--accent); }
 
 /* ---------- poem ---------- */
 
 .poem {
-  font-family: var(--display);
-  font-size: 1.15rem;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 1.2rem;
   line-height: 2;
   color: var(--ink);
   white-space: pre-wrap;
-  border-left: 2px solid var(--rule);
+  border-left: 2px solid var(--rule-strong);
   padding-left: 1.6rem;
 }
 
-.poem-stanza-break { display: block; height: 1.2rem; }
-
 /* ---------- photographs ---------- */
 
-.gallery {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.6rem;
-}
-
+.gallery { display: grid; grid-template-columns: 1fr; gap: 2.6rem; }
 .gallery figure { margin: 0; }
 
 .gallery img {
   border: 1px solid var(--rule);
-  filter: sepia(8%) contrast(1.02);
+  filter: sepia(4%) contrast(1.02);
 }
 
 .gallery figcaption {
@@ -393,20 +429,10 @@ article.essay .content > p:first-of-type::first-letter,
   color: var(--ink-soft);
 }
 
-/* ---------- responsive ---------- */
+.gallery figcaption a { border: none; color: var(--ink-soft); }
+.gallery figcaption a:hover { color: var(--accent); }
 
-@media (max-width: 30rem) {
-  body { font-size: 17px; }
-  .site-tagline, nav.site-nav { margin-left: 0; }
-  .site-mark .wordmark { font-size: 1.3rem; }
-  article.essay h1, .prose-page h1 { font-size: 1.8rem; }
-  .home-intro { font-size: 1.25rem; }
-  .entry-list li { flex-wrap: wrap; }
-  .entry-kind { margin-left: 0; }
-  .content p.lede { font-size: 1.15rem; }
-}
-
-/* ---------- lightbox (js/main.js toggles the .open class) ---------- */
+/* ---------- lightbox ---------- */
 
 .gallery-link { border: none; cursor: zoom-in; }
 
@@ -414,7 +440,7 @@ article.essay .content > p:first-of-type::first-letter,
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(32, 28, 22, 0.92);
+  background: rgba(6, 3, 10, 0.94);
   z-index: 50;
   align-items: center;
   justify-content: center;
@@ -427,9 +453,23 @@ article.essay .content > p:first-of-type::first-letter,
 .lightbox img {
   max-width: 100%;
   max-height: 100%;
-  border: 1px solid var(--brass);
+  border: 1px solid var(--accent);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 30rem) {
+  body { font-size: 17px; }
+  .wordmark { font-size: 1.7rem; }
+  article.essay h1, .prose-page h1 { font-size: 1.7rem; }
+  .home-intro { font-size: 1.15rem; }
+  .entry-list li { flex-wrap: wrap; }
+  .entry-kind { margin-left: 0; }
+  .content p.lede { font-size: 1.12rem; }
+  .header-top { flex-direction: row; align-items: center; }
+  .theme-toggle { margin-top: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { scroll-behavior: auto !important; }
+  * { scroll-behavior: auto !important; transition: none !important; }
 }

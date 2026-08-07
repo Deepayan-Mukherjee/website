@@ -8,6 +8,30 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
+// Dark/light toggle. The no-flash inline script in <head> sets the
+// initial state before paint; this just wires up the button and
+// remembers the choice for next visit.
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  const root = document.documentElement;
+
+  const isLight = () => root.getAttribute("data-theme") === "light";
+  const updateLabel = () => { btn.textContent = isLight() ? "Dark" : "Light"; };
+  updateLabel();
+
+  btn.addEventListener("click", () => {
+    if (isLight()) {
+      root.removeAttribute("data-theme");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.setAttribute("data-theme", "light");
+      localStorage.setItem("theme", "light");
+    }
+    updateLabel();
+  });
+});
+
 // Photograph lightbox: click a thumbnail on the Photographs page
 // to see it full-size; click again (or press Escape) to close.
 document.addEventListener("DOMContentLoaded", () => {
