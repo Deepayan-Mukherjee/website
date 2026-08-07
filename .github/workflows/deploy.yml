@@ -32,6 +32,9 @@ jobs:
       - name: Generate pages for any new photographs
         run: python3 scripts/generate_photo_pages.py
 
+      - name: Inject shared content (footer, etc.) into every page
+        run: python3 scripts/inject_partials.py
+
       - name: Rebuild index listings from post metadata
         run: python3 scripts/build_index.py
 
