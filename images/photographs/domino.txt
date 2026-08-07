@@ -1,0 +1,4 @@
+title: Fallen Dominoes
+date: 2026-08-05
+caption: Here we see a series of dominoes
+         standing fallen. They are spent.
