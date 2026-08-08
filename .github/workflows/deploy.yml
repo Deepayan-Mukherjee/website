@@ -38,6 +38,9 @@ jobs:
       - name: Rebuild index listings from post metadata
         run: python3 scripts/build_index.py
 
+      - name: Rebuild sitemap.xml
+        run: python3 scripts/build_sitemap.py
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
