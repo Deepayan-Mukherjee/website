@@ -159,7 +159,7 @@ PAGE = """<!DOCTYPE html>
         <a href="../essays/">Essays</a>
         <a href="../poetry/">Poetry</a>
         <a href="./" class="active">Photographs</a>
-        <a href="../about.html">About</a>
+        <a href="../about">About</a>
       </div>
     </nav>
   </div>

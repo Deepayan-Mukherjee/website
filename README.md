@@ -253,6 +253,27 @@ push and fills in every marker it finds a matching file for. A
 marker with no matching partial is left alone, with a warning in the
 build log — so a typo doesn't silently delete anything.
 
+## Sitemap
+
+`sitemap.xml` lists every page on the site for search engines —
+generated fresh on every push by `scripts/build_sitemap.py`, so a new
+essay, poem, or photo shows up in it automatically without you doing
+anything. `robots.txt` points crawlers at it.
+
+This matters because a brand-new site has no other pages linking to
+it yet, so Google's crawler has nothing to follow to find your
+content on its own. Submitting the sitemap once in Search Console
+(Sitemaps → enter `sitemap.xml` → Submit) tells Google to check this
+one file periodically instead of you manually requesting indexing
+for every new page — the first submission is a one-time step, after
+that it's hands-off.
+
+To keep a page out of the sitemap (a draft you're not ready to
+publish, for instance), add this to its `<head>`:
+```html
+<meta name="robots" content="noindex">
+```
+
 ## Clean URLs
 
 Links between pages never show `.html` or `index.html` in the address
