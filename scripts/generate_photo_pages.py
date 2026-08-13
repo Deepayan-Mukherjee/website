@@ -127,7 +127,8 @@ PAGE = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} · Deepayan Mukherjee</title>
-  <link rel="icon" href="../favicon.png" type="image/png">
+  <link rel="icon" href="../icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
   <meta name="post-date" content="{iso}">
   <meta name="post-kind" content="photograph">
   <meta name="post-image" content="../images/photographs/{filename}">
