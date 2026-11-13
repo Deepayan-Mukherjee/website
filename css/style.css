@@ -1,31 +1,31 @@
 /* ===========================================================
-   Deepayan Mukherjee — personal writing site
-   Artistic academic minimalism: near-black ink / warm ivory,
-   a muted-gold accent, and a hand-set wordmark pairing a
-   calligraphic swash initial with a small-caps display serif.
+   Deepayan Mukherjee, personal writing site
+   Styled after cfr.org: warm off-white page (light) or pure
+   black (dark), a letter-spaced geometric-sans wordmark, a
+   left-aligned nav between two solid rules, italic serif
+   article headlines, upright serif list headlines, and a
+   grotesque sans for ledes, dates and labels. Monochrome: no
+   colour accent, links are marked by underline.
+   Selectors are unchanged, so the HTML and js/main.js work as-is.
    =========================================================== */
 
 /* ---- self-hosted fonts ----
-   Previously loaded from Google's CDN, which meant an extra DNS
-   lookup + connection + CSS fetch + font fetch, all sequential,
-   before the real fonts appeared — visible as a flash of a generic
-   fallback (especially bad for the wordmark, since nothing looks
-   like Pinyon Script's swash). Hosting the files ourselves removes
-   that round-trip entirely. Each file is subsetted to Latin +
-   punctuation only — 330KB total across all five. */
+   New: jost-500.woff2 (wordmark) and inter-tight.woff2 (UI sans).
+   Kept: Playfair Display and both EB Garamond files.
+   No longer used: pinyon-script.woff2 and cinzel.woff2. */
 
 @font-face {
-  font-family: "Pinyon Script";
-  src: url("../fonts/pinyon-script.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Jost";
+  src: url("../fonts/jost-500.woff2") format("woff2");
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Cinzel";
-  src: url("../fonts/cinzel.woff2") format("woff2");
-  font-weight: 400 600;
+  font-family: "Inter Tight";
+  src: url("../fonts/inter-tight.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -55,35 +55,34 @@
 }
 
 :root {
-  --display-script: "Pinyon Script", "Brush Script MT", cursive;
-  --wordmark-caps:  "Cinzel", serif;
-  --heading:        "Playfair Display", "EB Garamond", Georgia, serif;
-  --body:           "EB Garamond", Georgia, "Iowan Old Style", serif;
-  --mono:           "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --max-w: min(80rem, 88vw);
+  --wordmark: "Jost", "Futura", "Century Gothic", "Helvetica Neue", Arial, sans-serif;
+  --sans:     "Inter Tight", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --serif:    "EB Garamond", Georgia, "Times New Roman", serif;
+  --body:     "EB Garamond", Georgia, "Iowan Old Style", serif;
+  --mono:     "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --max-w: min(80rem, 90vw);
 
-  /* ---- dark theme (default) ---- */
-  --bg:          #0B0710;
-  --bg-raised:   #150E1F;
-  --ink:         #F3EEE8;
-  --ink-soft:    #B3A8BE;
-  --accent:      #C9A24A;
-  --accent-deep: #A9843B;
-  --rule:        rgba(211, 197, 224, 0.16);
-  --rule-strong: rgba(211, 197, 224, 0.28);
-  --shadow:      rgba(0, 0, 0, 0.4);
+  /* ---- dark theme (default): CFR homepage ---- */
+  --bg:          #000000;
+  --bg-raised:   #141414;
+  --ink:         #FFFFFF;
+  --ink-soft:    #9C9C9C;
+  --accent:      #FFFFFF;
+  --rule:        rgba(255, 255, 255, 0.2);
+  --rule-strong: #FFFFFF;
+  --shadow:      rgba(0, 0, 0, 0.5);
 }
 
+/* ---- light theme: CFR article pages ---- */
 html[data-theme="light"] {
-  --bg:          #F7F2E9;
-  --bg-raised:   #EDE5D4;
-  --ink:         #1A1420;
-  --ink-soft:    #6B5F72;
-  --accent:      #8C6A24;
-  --accent-deep: #6E5119;
-  --rule:        rgba(26, 20, 32, 0.13);
-  --rule-strong: rgba(26, 20, 32, 0.24);
-  --shadow:      rgba(60, 45, 20, 0.1);
+  --bg:          #F7F6F4;
+  --bg-raised:   #EDEBE7;
+  --ink:         #111111;
+  --ink-soft:    #6E6E6E;
+  --accent:      #111111;
+  --rule:        rgba(17, 17, 17, 0.16);
+  --rule-strong: #111111;
+  --shadow:      rgba(0, 0, 0, 0.08);
 }
 
 * { box-sizing: border-box; }
@@ -99,95 +98,43 @@ body {
   color: var(--ink);
   font-family: var(--body);
   font-size: 19px;
-  line-height: 1.75;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   transition: background-color 220ms ease, color 220ms ease;
 }
 
-a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
-a:hover { border-bottom-color: var(--accent); }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+/* Monochrome links, marked by a thin underline. */
+a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-soft);
+  transition: border-color 150ms ease, color 150ms ease;
+}
+a:hover { border-bottom-color: var(--ink); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
 img { max-width: 100%; display: block; }
 
-/* ---------- decorative background pattern (large screens only) ---------- */
-/* A faint rhomboid grid, fixed behind the content. Fills the
-   wide-screen negative space intentionally rather than leaving it
-   looking empty, and drifts slowly as you scroll for a subtle sense
-   of depth. Purely aesthetic, very low opacity, never competes with
-   actual content. Built from two crossed diagonal line grids —
-   where they overlap forms the diamond lattice — so it's plain CSS,
-   no image file, and automatically follows the accent color in both
-   themes with zero extra work. */
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  user-select: none;
-  --rhomb-size: 88px;
-  background-image:
-    repeating-linear-gradient(60deg,
-      color-mix(in srgb, var(--accent) 85%, transparent) 0 1.5px,
-      transparent 1.5px calc(var(--rhomb-size) * 0.5)),
-    repeating-linear-gradient(-60deg,
-      color-mix(in srgb, var(--accent) 85%, transparent) 0 1.5px,
-      transparent 1.5px calc(var(--rhomb-size) * 0.5));
-  background-position: 0 var(--monogram-shift, 0px), 0 var(--monogram-shift, 0px);
-  opacity: 0.22;
-  /* Full opacity out at the edges, fading to zero well before the
-     reading column — visible in the margins, gone behind the text.
-     Fixed rem-based stops (not vw) so the fade tracks the actual
-     content width rather than a fraction of whatever the screen
-     happens to be. */
-  mask-image: linear-gradient(to right,
-    #000 0, #000 8rem,
-    transparent calc(50% - 24rem), transparent calc(50% + 24rem),
-    #000 calc(100% - 8rem), #000 100%);
-  -webkit-mask-image: linear-gradient(to right,
-    #000 0, #000 8rem,
-    transparent calc(50% - 24rem), transparent calc(50% + 24rem),
-    #000 calc(100% - 8rem), #000 100%);
-}
+/* ---------- background lattice: off ---------- */
+body::before { display: none; }
 
 .site-header, main, .site-footer { position: relative; z-index: 1; }
 
-@media (max-width: 75rem) {
-  body::before { display: none; }
-}
-
 /* ---------- header ---------- */
-
-/* ---- sticky top block ----
-   Header and nav travel together and stay pinned to the top. Once
-   you've scrolled past the first screen the whole thing compacts —
-   otherwise the homepage's full-size masthead would eat a third of
-   the viewport permanently. The blurred translucent background keeps
-   text from showing through as it passes underneath. */
 
 .site-top {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(14px) saturate(1.1);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  background: var(--bg);
   transition: background-color 220ms ease;
-}
-
-/* Browsers without backdrop-filter get a solid background instead,
-   so the header never becomes unreadable. */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-top { background: var(--bg); }
 }
 
 .site-header {
   width: 100%;
   flex: none;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: none;
 }
 
 .site-header-inner {
@@ -195,19 +142,18 @@ body::before {
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 1.8rem;
+  padding: 2.4rem 0 2.2rem;
   display: flex;
   justify-content: center;
   transition: padding 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* compacted state, toggled by js/main.js past ~60px of scroll */
 .site-top.scrolled .site-header-inner {
-  padding: 0.9rem 1.5rem 0.7rem;
+  padding: 0.9rem 0 0.8rem;
 }
 
 .site-top.scrolled nav.site-nav {
-  padding-top: 0.65rem;
+  padding-top: 0.55rem;
   padding-bottom: 0.55rem;
 }
 
@@ -218,115 +164,113 @@ body::before {
   display: inline-block;
 }
 
-/* Interior pages get a modest masthead — the name is a header, not
-   a cover. The homepage keeps the full-size version below. */
+/* Wordmark: even, widely tracked geometric caps, like
+   COUNCIL on FOREIGN RELATIONS. The swash initials become plain
+   caps of the same weight. */
 .wordmark {
-  font-family: var(--wordmark-caps);
-  font-size: clamp(1.4rem, 3.2vw, 3.1rem);
+  font-family: var(--wordmark);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 2.2vw, 2rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--ink);
   white-space: nowrap;
   display: inline-block;
   transition: font-size 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Homepage: full-size, scales with the viewport to fill the band. */
 body.is-home .wordmark {
-  font-size: clamp(1.6rem, 7.2vw, 8rem);
+  font-size: clamp(1.3rem, 2.8vw, 2.5rem);
 }
 
-/* Once scrolled, both collapse to the same compact size so the
-   sticky bar stays out of the way while you're reading. */
 .site-top.scrolled .wordmark,
 body.is-home .site-top.scrolled .wordmark {
-  font-size: clamp(1.15rem, 2.1vw, 1.75rem);
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
 }
 
-.wordmark .initial {
-  font-family: var(--display-script);
-  font-size: 1.7em;
-  font-weight: 400;
-  color: var(--accent);
-  vertical-align: -0.08em;
-  padding: 0 0.02em;
-}
-
+.wordmark .initial,
 .wordmark .smallcaps {
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: inherit;
+  letter-spacing: inherit;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  font-size: 0.62em;
-  font-weight: 500;
+  color: inherit;
+  vertical-align: baseline;
+  padding: 0;
 }
 
+/* Word gap before the surname's initial (the HTML has no space
+   between the two halves of the name). */
+.wordmark .smallcaps + .initial { margin-left: 0.42em; }
+
+/* Theme toggle reads like CFR's plain "Log In" link. */
 .theme-toggle {
   position: absolute;
-  top: 1.6rem;
-  right: 1.5rem;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
   background: none;
-  border: 1px solid var(--rule-strong);
-  border-radius: 999px;
-  color: var(--ink-soft);
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.4rem 0.9rem;
+  border: none;
+  border-radius: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  padding: 0.3rem 0;
   cursor: pointer;
-  transition: border-color 150ms ease, color 150ms ease;
+  border-bottom: 1px solid transparent;
+  transition: border-color 150ms ease;
 }
 
-body.is-home .theme-toggle { top: 2.5rem; }
+body.is-home .theme-toggle { top: 50%; }
 
-.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle:hover { border-bottom-color: var(--ink); }
 
-/* ---- nav: sits below the header rule, centered, and spans exactly
-   the width of the name above it. js/main.js measures the wordmark
-   and writes --name-width; the max-width below is the no-JS
-   fallback. ---- */
+/* ---- nav: left-aligned sans links between two solid rules that
+   span the content width, not the full screen. ---- */
 
 nav.site-nav {
   width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
   flex: none;
   display: flex;
-  justify-content: center;
-  padding: 1.1rem 1.5rem 0;
+  justify-content: flex-start;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  transition: padding 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-body.is-home nav.site-nav { padding: 1.4rem 1.5rem 0; }
+body.is-home nav.site-nav { padding: 1.1rem 0; }
 
-/* Interior pages: comfortable natural spacing, centered. */
-.site-nav-inner {
+.site-nav-inner,
+body.is-home .site-nav-inner {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: baseline;
-  gap: 2.4rem;
+  gap: 2.2rem;
+  width: auto;
   max-width: 100%;
   flex-wrap: wrap;
-}
-
-/* Homepage: spans exactly the width of the large name above it.
-   js/main.js measures the wordmark and writes --name-width. */
-body.is-home .site-nav-inner {
-  justify-content: space-between;
-  gap: 1rem;
-  width: var(--name-width, auto);
 }
 
 nav.site-nav a {
   position: relative;
   border: none;
-  font-family: var(--mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  padding-bottom: 0.3rem;
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  text-transform: capitalize;
+  color: var(--ink);
+  padding-bottom: 0.15rem;
   white-space: nowrap;
-  transition: color 280ms ease, letter-spacing 280ms ease;
 }
 
-/* The underline is a pseudo-element scaled from the centre outwards,
-   rather than a border that just switches on — so it sweeps open on
-   hover and closes again on the way out. */
 nav.site-nav a::after {
   content: "";
   position: absolute;
@@ -334,37 +278,20 @@ nav.site-nav a::after {
   right: 0;
   bottom: 0;
   height: 1px;
-  background: var(--accent);
+  background: var(--ink);
   transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-nav.site-nav a:hover,
-nav.site-nav a:focus-visible {
-  color: var(--accent);
-  letter-spacing: 0.085em;
+  transform-origin: left;
+  transition: transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 nav.site-nav a:hover::after,
-nav.site-nav a:focus-visible::after {
+nav.site-nav a:focus-visible::after,
+nav.site-nav a.active::after {
   transform: scaleX(1);
 }
 
-/* The current section stays lit, without the hover animation. */
-nav.site-nav a.active { color: var(--accent); }
-nav.site-nav a.active::after { transform: scaleX(1); }
-
 @media (prefers-reduced-motion: reduce) {
-  nav.site-nav a { transition: color 280ms ease; }
-  nav.site-nav a:hover, nav.site-nav a:focus-visible { letter-spacing: 0.06em; }
   nav.site-nav a::after { transition: none; }
-}
-
-nav.site-nav a:hover,
-nav.site-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
 }
 
 /* ---------- main / footer ---------- */
@@ -374,23 +301,23 @@ main {
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 3rem 1.5rem 5rem;
+  padding: 3.5rem 0 5rem;
 }
 
 .site-footer {
   width: 100%;
   flex: none;
   margin-top: auto;
-  border-top: 1px solid var(--rule);
 }
 
 .site-footer-inner {
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
-  font-family: var(--mono);
-  font-size: 0.78rem;
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--rule-strong);
+  font-family: var(--sans);
+  font-size: 0.9rem;
   color: var(--ink-soft);
   display: flex;
   justify-content: space-between;
@@ -400,28 +327,34 @@ main {
 
 /* ---------- home ---------- */
 
+/* Intro in the large sans used for CFR's standfirst. */
 .home-intro {
-  font-family: var(--heading);
+  font-family: var(--sans);
   font-weight: 400;
-  font-size: 1.35rem;
-  line-height: 1.6;
+  font-size: 1.6rem;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
   color: var(--ink);
-  margin: 0 0 3.5rem;
-  max-width: 40rem;
-  letter-spacing: 0.01em;
+  margin: 0 0 4rem;
+  max-width: 44rem;
 }
 
-.home-intro em { font-style: normal; color: var(--accent); }
+.home-intro em {
+  font-style: normal;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink-soft);
+}
 
 .section-label {
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.78rem;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 1.1rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  margin: 0;
+  padding: 0 0 0.8rem;
+  border-bottom: 1px solid var(--rule-strong);
 }
 
 .entry-list {
@@ -431,42 +364,52 @@ main {
 }
 
 .entry-list li {
-  padding: 1.15rem 0;
+  padding: 1.5rem 0;
   border-bottom: 1px solid var(--rule);
   display: flex;
-  gap: 1.2rem;
+  gap: 1.6rem;
   align-items: baseline;
 }
 
-.entry-list li:first-child { padding-top: 0; }
+.entry-list li:first-child { padding-top: 1.5rem; }
 
 .entry-date {
-  font-family: var(--mono);
-  font-size: 0.78rem;
+  font-family: var(--sans);
+  font-size: 0.92rem;
   color: var(--ink-soft);
   white-space: nowrap;
   flex: none;
-  width: 5.2rem;
+  width: 6.5rem;
 }
 
+/* List headlines: upright serif, like CFR's homepage stack. */
 .entry-title {
-  font-family: var(--body);
-  font-style: italic;
-  font-size: 1.2rem;
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
   color: var(--ink);
   border: none;
 }
 
-.entry-title:hover { color: var(--accent); }
+.entry-title:hover { border-bottom: 1px solid var(--ink); }
 
+/* Kind as CFR's small boxed topic tag. */
 .entry-kind {
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.68rem;
-  letter-spacing: 0.07em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  padding: 0.25rem 0.45rem;
+  line-height: 1;
   margin-left: auto;
   flex: none;
+  align-self: center;
 }
 
 /* ---------- list pages ---------- */
@@ -474,17 +417,21 @@ main {
 .list-header { margin-bottom: 2.5rem; }
 
 .list-header h1 {
-  font-family: var(--heading);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  font-size: 2rem;
-  margin: 0 0 0.5rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-size: 3.6rem;
+  line-height: 1.05;
+  margin: 0 0 0.9rem;
 }
 
 .list-header p {
-  color: var(--ink-soft);
-  font-style: italic;
-  font-family: var(--body);
+  color: var(--ink);
+  font-style: normal;
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  line-height: 1.4;
   margin: 0;
 }
 
@@ -492,78 +439,85 @@ main {
 
 article.essay,
 .prose-page {
-  max-width: 42rem;
+  max-width: 44rem;
   margin: 0 auto;
 }
 
 article.essay .article-head,
 .prose-page .article-head {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.8rem;
 }
 
+/* The CFR signature: large italic serif headline. */
 article.essay h1,
 .prose-page h1 {
-  font-family: var(--heading);
-  font-weight: 500;
-  letter-spacing: 0.015em;
-  font-size: 2.15rem;
-  line-height: 1.25;
-  margin: 0 0 0.8rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 1.04;
+  margin: 0 0 1.4rem;
 }
 
 .meta-row {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  letter-spacing: 0;
   color: var(--ink-soft);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
+/* No drop cap. */
 article.essay .content > p:first-of-type::first-letter,
 .prose-page .content > p:first-of-type::first-letter {
-  font-family: var(--heading);
-  font-size: 3.2rem;
-  float: left;
-  line-height: 0.75;
-  padding: 0.1rem 0.4rem 0 0;
-  color: var(--accent);
+  all: unset;
 }
 
-.content p { margin: 0 0 1.55rem; }
+.content p { margin: 0 0 1.5rem; }
 
+/* Standfirst in large sans, as on CFR article pages. */
 .content p.lede {
-  font-family: var(--body);
-  font-style: italic;
-  font-size: 1.26rem;
-  line-height: 1.6;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 1.45rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
   color: var(--ink);
+  margin-bottom: 2.4rem;
 }
 
 .content h2 {
-  font-family: var(--heading);
+  font-family: var(--serif);
+  font-style: normal;
   font-weight: 500;
-  letter-spacing: 0.02em;
-  font-size: 1.3rem;
-  margin: 3rem 0 1.1rem;
-  color: var(--accent);
+  letter-spacing: -0.005em;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+  color: var(--ink);
   scroll-margin-top: calc(var(--top-h, 5rem) + 1.5rem);
 }
 .content h3 {
-  font-family: var(--heading);
-  font-weight: 500;
+  font-family: var(--sans);
+  font-weight: 600;
   font-size: 1.05rem;
-  margin: 2.2rem 0 0.9rem;
+  margin: 2.2rem 0 0.8rem;
+  color: var(--ink);
   scroll-margin-top: calc(var(--top-h, 5rem) + 1.5rem);
 }
 .content blockquote {
-  margin: 2rem 0;
-  padding: 0.2rem 0 0.2rem 1.3rem;
-  border-left: 2px solid var(--accent);
+  margin: 2.2rem 0;
+  padding: 0;
+  border: none;
+  font-family: var(--serif);
   font-style: italic;
-  color: var(--ink-soft);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: var(--ink);
 }
 .content hr { border: none; border-top: 1px solid var(--rule); margin: 2.8rem 0; }
-.content code { font-family: var(--mono); font-size: 0.9em; background: var(--bg-raised); padding: 0.1em 0.35em; border-radius: 3px; }
+.content code { font-family: var(--mono); font-size: 0.85em; background: var(--bg-raised); padding: 0.1em 0.35em; border-radius: 0; }
 .content strong { color: var(--ink); }
 
 /* ---------- reading aids ---------- */
@@ -574,7 +528,7 @@ article.essay .content > p:first-of-type::first-letter,
   left: 0;
   height: 3px;
   width: 0%;
-  background: var(--accent);
+  background: var(--ink);
   z-index: 45;
   transition: width 80ms linear;
 }
@@ -583,19 +537,17 @@ article.essay .content > p:first-of-type::first-letter,
 
 .toc {
   margin: 0 0 2.6rem;
-  padding: 1.1rem 1.3rem;
-  background: var(--bg-raised);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
+  padding: 1rem 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
 }
 
-/* On wide screens the contents list moves out beside the text as a
-   sticky sidebar — that's what makes the extra page width useful,
-   rather than leaving a dead margin. Below this width it falls back
-   to sitting inline above the essay. */
-@media (min-width: 68rem) {
+@media (min-width: 72rem) {
   article.essay.has-toc {
-    max-width: 42rem;
+    max-width: 44rem;
     margin-left: auto;
     margin-right: auto;
     padding-left: 0;
@@ -604,95 +556,91 @@ article.essay .content > p:first-of-type::first-letter,
     position: sticky;
     top: calc(var(--top-h, 5rem) + 2rem);
     float: left;
-    width: 14rem;
-    margin: 0 0 2rem -17rem;
-    background: none;
-    border: none;
-    border-left: 1px solid var(--rule);
-    border-radius: 0;
-    padding: 0 0 0 1.1rem;
+    width: 13rem;
+    margin: 0 0 2rem -16.5rem;
+    border-bottom: none;
+    padding: 0.8rem 0 0;
   }
 }
 
 .toc-label {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.09em;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 0.7rem;
+  color: var(--ink);
+  margin: 0 0 0.6rem;
 }
 
 .toc ol {
   margin: 0;
-  padding-left: 1.2rem;
-  font-family: var(--mono);
-  font-size: 0.86rem;
-  line-height: 1.9;
+  padding-left: 1.1rem;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  line-height: 1.75;
   color: var(--ink-soft);
 }
 
 .toc a { border: none; color: var(--ink-soft); }
-.toc a:hover { color: var(--accent); }
+.toc a:hover { color: var(--ink); }
 
 .back-to-top {
   display: inline-block;
   margin-top: 3rem;
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
   border: none;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--rule-strong);
   padding-top: 1rem;
   width: 100%;
 }
-.back-to-top:hover { color: var(--accent); }
+.back-to-top:hover { color: var(--ink-soft); }
 
 /* ---------- poem ---------- */
 
 .poem {
-  font-family: var(--body);
+  font-family: var(--serif);
   font-style: italic;
-  font-size: 1.2rem;
-  line-height: 2;
+  font-size: 1.3rem;
+  line-height: 1.85;
   color: var(--ink);
   white-space: pre-wrap;
-  border-left: 2px solid var(--rule-strong);
-  padding-left: 1.6rem;
+  border: none;
+  padding-left: 0;
 }
 
 /* ---------- photographs ---------- */
 
-.gallery { display: grid; grid-template-columns: 1fr; gap: 2.6rem; }
+.gallery { display: grid; grid-template-columns: 1fr; gap: 2.8rem; }
 .gallery figure { margin: 0; }
 
 @media (min-width: 40rem) {
-  .gallery { grid-template-columns: 1fr 1fr; gap: 2.6rem 2rem; }
+  .gallery { grid-template-columns: 1fr 1fr; gap: 2.8rem 2rem; }
 }
 
 .gallery img {
-  border: 1px solid var(--rule);
-  filter: sepia(4%) contrast(1.02);
+  border: none;
+  filter: none;
 }
 
+/* Caption in small sans; links (credits) in grey, as CFR does. */
 .gallery figcaption {
-  margin-top: 0.7rem;
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--ink-soft);
+  margin-top: 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--ink);
 }
 
 .gallery figcaption a {
-  color: var(--accent);
-  border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  transition: color 200ms ease, border-color 200ms ease;
+  color: var(--ink-soft);
+  border-bottom: none;
 }
-.gallery figcaption a:hover {
-  color: var(--ink);
-  border-bottom-color: var(--ink);
-}
+.gallery figcaption a:hover { color: var(--ink); }
 
 /* ---------- lightbox ---------- */
 
@@ -702,7 +650,7 @@ article.essay .content > p:first-of-type::first-letter,
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(6, 3, 10, 0.94);
+  background: rgba(0, 0, 0, 0.94);
   z-index: 50;
   align-items: center;
   justify-content: center;
@@ -715,53 +663,35 @@ article.essay .content > p:first-of-type::first-letter,
 .lightbox img {
   max-width: 100%;
   max-height: 100%;
-  border: 1px solid var(--accent);
+  border: none;
 }
 
 /* ---------- responsive ---------- */
 
 @media (max-width: 30rem) {
   body { font-size: 17px; }
-  article.essay h1, .prose-page h1 { font-size: 1.7rem; }
-  .home-intro { font-size: 1.15rem; }
-  .site-header-inner { padding: 3.6rem 1rem 1.4rem; }
-  .theme-toggle { top: 1rem; right: 1rem; }
-  nav.site-nav { padding: 1.1rem 1rem 0; }
-  .site-nav-inner {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.6rem 1.4rem;
-  }
-  nav.site-nav a { font-size: 0.74rem; }
-  .entry-list li {
-    display: block;
-    padding: 1rem 0;
-  }
-  .entry-date {
-    display: block;
-    width: auto;
-    margin-bottom: 0.2rem;
-  }
-  .entry-title { font-size: 1.1rem; }
-  .entry-kind {
-    display: block;
-    margin: 0.3rem 0 0;
-  }
-  .content p.lede { font-size: 1.12rem; }
+  .site-header-inner { padding: 3.2rem 0 1.4rem; }
+  .theme-toggle,
+  body.is-home .theme-toggle { top: 0.8rem; transform: none; }
+  .wordmark, body.is-home .wordmark { font-size: 1.05rem; letter-spacing: 0.06em; }
+  nav.site-nav, body.is-home nav.site-nav { padding: 0.8rem 0; }
+  .site-nav-inner, body.is-home .site-nav-inner { gap: 0.4rem 1.4rem; }
+  nav.site-nav a { font-size: 0.95rem; }
+  .home-intro { font-size: 1.3rem; }
+  article.essay h1, .prose-page h1 { font-size: 2.3rem; }
+  .list-header h1 { font-size: 2.5rem; }
+  .content p.lede { font-size: 1.2rem; }
+  .entry-list li { display: block; padding: 1.2rem 0; }
+  .entry-date { display: block; width: auto; margin-bottom: 0.3rem; }
+  .entry-title { font-size: 1.35rem; }
+  .entry-kind { display: inline-block; margin: 0.6rem 0 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
 }
 
-/* ---------- custom ring cursor ---------- */
-/* A small ring follows the pointer and expands/snaps to fit whatever
-   it's hovering — links, buttons, the theme toggle. Desktop only:
-   touch devices don't have a persistent pointer, so this stays
-   dormant there (js/main.js only activates it after seeing real
-   mouse movement). The native cursor is hidden only once the ring is
-   confirmed active, so nothing breaks if JS fails to load. */
+/* ---------- custom ring cursor (kept, now monochrome) ---------- */
 
 #cursor-ring {
   position: fixed;
@@ -769,7 +699,7 @@ article.essay .content > p:first-of-type::first-letter,
   left: 0;
   width: 26px;
   height: 26px;
-  border: 1.5px solid var(--accent);
+  border: 1.5px solid var(--ink);
   border-radius: 999px;
   pointer-events: none;
   z-index: 9999;
@@ -784,11 +714,7 @@ article.essay .content > p:first-of-type::first-letter,
 
 #cursor-ring.active { opacity: 1; }
 
-/* Snapped onto a hoverable element: no fixed size here — JS sets
-   width/height/border-radius inline to exactly match the element's
-   own box, so the ring reads as "wrapping" it rather than just
-   growing a fixed amount. */
-#cursor-ring.snapped { border-color: var(--accent); border-width: 1.5px; }
+#cursor-ring.snapped { border-color: var(--ink); border-width: 1.5px; }
 
 body.has-custom-cursor,
 body.has-custom-cursor a,
@@ -796,27 +722,14 @@ body.has-custom-cursor button {
   cursor: none;
 }
 
-/* ---------- scroll reveal ---------- */
-/* Elements start slightly lowered and transparent; js/main.js adds
-   .visible via IntersectionObserver the first time each one scrolls
-   into view. Under prefers-reduced-motion, main.js skips the
-   animation entirely and everything is just visible immediately. */
+/* ---------- scroll reveal (kept, calmer) ---------- */
 
-/* Movement and fade run at different speeds on purpose: the element
-   travels into place fairly quickly with a slight overshoot (so it
-   "snaps" and settles), while the opacity keeps fading in more slowly
-   behind it. */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 1500ms ease,
-              transform 850ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  transform: translateY(16px);
+  transition: opacity 900ms ease, transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Applied for one frame while the element is first hidden. Without
-   this the browser transitions opacity 1 -> 0 over the full duration,
-   so the element never actually reaches 0 before we reveal it — and
-   the fade-in is invisible. */
 .reveal.no-anim,
 .reveal-fade.no-anim { transition: none !important; }
 
@@ -825,20 +738,12 @@ body.has-custom-cursor button {
   transform: translateY(0);
 }
 
-/* Photographs fade rather than rise — images sliding upward reads as
-   jumpy, a straight dissolve suits them better. Slower still, with a
-   touch of scale so they settle rather than blink on. */
 .reveal-fade {
   opacity: 0;
-  transform: translateY(18px) scale(1.012);
-  transition: opacity 1900ms ease,
-              transform 1000ms cubic-bezier(0.34, 1.28, 0.64, 1);
+  transition: opacity 1200ms ease;
 }
 
-.reveal-fade.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
+.reveal-fade.visible { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal-fade { opacity: 1; transform: none; transition: none; }
