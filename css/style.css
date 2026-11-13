@@ -237,9 +237,9 @@ body.is-home .theme-toggle { top: 50%; }
 .theme-toggle:hover { border-bottom-color: var(--ink); }
 
 /* ---- nav: four links spread across a ruled band. Each carries a
-   small orange index number (01-04). On hover an orange glow rises
-   from the bottom rule and a thick orange bar sweeps along it; the
-   current section keeps the bar and the orange text. ---- */
+   small orange index number (01-04). On hover the link turns orange
+   and an orange underline sweeps in beneath it; the current section
+   keeps both. ---- */
 
 nav.site-nav {
   width: 100%;
@@ -257,7 +257,7 @@ nav.site-nav {
 body.is-home nav.site-nav { padding: 0; }
 
 /* Links spread edge to edge. The negative margin lets each link have
-   side padding (for the glow) while the text still lines up with the
+   side padding (a bigger click target) while the text still lines up with the
    ends of the rules. */
 .site-nav-inner,
 body.is-home .site-nav-inner {
@@ -287,12 +287,7 @@ nav.site-nav a {
   padding: 1.1rem var(--np);
   white-space: nowrap;
   counter-increment: navitem;
-  background: linear-gradient(to top,
-      color-mix(in srgb, var(--accent) 22%, transparent),
-      transparent 75%)
-    no-repeat center bottom / calc(100% - 2 * var(--np)) 0%;
   transition: color 200ms ease,
-              background-size 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
               padding 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -307,38 +302,36 @@ nav.site-nav a::before {
   letter-spacing: 0.04em;
   color: var(--accent);
   transform: translateY(-0.35em);
-  transition: transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Orange bar that sits on the bottom rule */
+/* Orange underline just beneath the text. It draws in from the left
+   on hover and slides out to the right when the pointer leaves. */
 nav.site-nav a::after {
   content: "";
   position: absolute;
   left: var(--np);
   right: var(--np);
-  bottom: -1px;
-  height: 3px;
+  bottom: 0.8rem;
+  height: 2px;
   background: var(--accent);
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform-origin: right;
+  transition: transform 380ms cubic-bezier(0.65, 0, 0.35, 1),
+              bottom 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+
+nav.site-nav a:hover::after,
+nav.site-nav a:focus-visible::after {
+  transform-origin: left;
+}
+
+.site-top.scrolled nav.site-nav a::after { bottom: 0.35rem; }
 
 nav.site-nav a:hover,
 nav.site-nav a:focus-visible,
 nav.site-nav a.active {
   color: var(--accent);
   border: none;
-}
-
-nav.site-nav a:hover,
-nav.site-nav a:focus-visible {
-  background-size: calc(100% - 2 * var(--np)) 100%;
-}
-
-nav.site-nav a:hover::before,
-nav.site-nav a:focus-visible::before {
-  transform: translateY(-0.6em);
 }
 
 nav.site-nav a:hover::after,
@@ -744,6 +737,7 @@ article.essay .content > p:first-of-type::first-letter,
   .wordmark, body.is-home .wordmark { font-size: 1.05rem; letter-spacing: 0.06em; }
   .site-nav-inner, body.is-home .site-nav-inner { --np: 0.4rem; gap: 0; }
   nav.site-nav a { font-size: 0.95rem; padding: 0.8rem var(--np); gap: 0.35em; }
+  nav.site-nav a::after { bottom: 0.55rem; }
   .home-intro { font-size: 1.3rem; }
   article.essay h1, .prose-page h1 { font-size: 2.3rem; }
   .list-header h1 { font-size: 2.5rem; }
@@ -758,36 +752,16 @@ article.essay .content > p:first-of-type::first-letter,
   * { scroll-behavior: auto !important; transition: none !important; }
 }
 
-/* ---------- custom ring cursor (kept, now monochrome) ---------- */
+/* ---------- custom ring cursor: off ----------
+   The ring is hidden and the normal system cursor is restored, even
+   though js/main.js still runs. (You can also delete the cursor code
+   from main.js and the #cursor-ring element from the HTML.) */
 
-#cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 26px;
-  height: 26px;
-  border: 1.5px solid var(--ink);
-  border-radius: 999px;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-100px, -100px) translate(-50%, -50%);
-  transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-              height 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-              border-radius 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-              border-color 220ms ease,
-              opacity 180ms ease;
-  opacity: 0;
-}
+#cursor-ring { display: none !important; }
 
-#cursor-ring.active { opacity: 1; }
-
-#cursor-ring.snapped { border-color: var(--ink); border-width: 1.5px; }
-
-body.has-custom-cursor,
+body.has-custom-cursor { cursor: auto; }
 body.has-custom-cursor a,
-body.has-custom-cursor button {
-  cursor: none;
-}
+body.has-custom-cursor button { cursor: pointer; }
 
 /* ---------- scroll reveal (kept, calmer) ---------- */
 
