@@ -378,16 +378,19 @@ main {
 
 /* ---------- home ---------- */
 
-/* Intro in the large sans used for CFR's standfirst. */
+/* Intro: one plain paragraph in the serif, centred under the name,
+   set large and airy so it fills the space between nav and list. */
 .home-intro {
-  font-family: var(--sans);
+  font-family: var(--serif);
   font-weight: 400;
-  font-size: 1.5rem;
-  line-height: 1.4;
-  letter-spacing: 0;
+  font-size: clamp(1.5rem, 2.3vw, 2.15rem);
+  line-height: 1.6;
+  letter-spacing: 0.005em;
   color: var(--ink);
-  margin: 0 0 4rem;
-  max-width: 44rem;
+  text-align: center;
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: 4.5rem 0 5rem;
 }
 
 .home-intro em {
@@ -733,7 +736,7 @@ article.essay .content > p:first-of-type::first-letter,
   .site-nav-inner, body.is-home .site-nav-inner { --np: 0.4rem; gap: 0; }
   nav.site-nav a { font-size: 1rem; padding: 0.8rem var(--np); }
   nav.site-nav a::after { bottom: 0.55rem; }
-  .home-intro { font-size: 1.3rem; }
+  .home-intro { font-size: 1.4rem; line-height: 1.55; padding: 2.5rem 0 3rem; }
   article.essay h1, .prose-page h1 { font-size: 2.3rem; }
   .list-header h1 { font-size: 2.5rem; }
   .content p.lede { font-size: 1.2rem; }
