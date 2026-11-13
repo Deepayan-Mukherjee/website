@@ -378,9 +378,13 @@ main {
 
 /* ---------- home ---------- */
 
-/* Intro: one plain paragraph in the serif, centred under the name,
-   set large and airy so it fills the space between nav and list. */
+/* Intro: the homepage's opening screen. The paragraph fills the rest
+   of the first screen below the nav (--top-h is the header height,
+   published by main.js; 3.5rem is main's top padding), with the text
+   centred vertically. A quiet "Scroll" label sits at the bottom, and
+   the Recent list begins below the fold. */
 .home-intro {
+  position: relative;
   font-family: var(--serif);
   font-weight: 400;
   font-size: clamp(1.5rem, 2.3vw, 2.15rem);
@@ -389,8 +393,27 @@ main {
   color: var(--ink);
   text-align: center;
   max-width: 54rem;
-  margin: 0 auto;
-  padding: 4.5rem 0 5rem;
+  min-height: calc(100vh - var(--top-h, 14rem) - 3.5rem);
+  min-height: calc(100svh - var(--top-h, 14rem) - 3.5rem);
+  align-content: center;          /* vertical centring of the text */
+  margin: 0 auto 3rem;
+  padding: 2rem 0 5rem;
+}
+
+.home-intro::after {
+  content: "Scroll";
+  position: absolute;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--ink-soft);
+  pointer-events: none;
 }
 
 .home-intro em {
@@ -736,7 +759,7 @@ article.essay .content > p:first-of-type::first-letter,
   .site-nav-inner, body.is-home .site-nav-inner { --np: 0.4rem; gap: 0; }
   nav.site-nav a { font-size: 1rem; padding: 0.8rem var(--np); }
   nav.site-nav a::after { bottom: 0.55rem; }
-  .home-intro { font-size: 1.4rem; line-height: 1.55; padding: 2.5rem 0 3rem; }
+  .home-intro { font-size: 1.4rem; line-height: 1.55; padding: 1.5rem 0 4.5rem; }
   article.essay h1, .prose-page h1 { font-size: 2.3rem; }
   .list-header h1 { font-size: 2.5rem; }
   .content p.lede { font-size: 1.2rem; }
