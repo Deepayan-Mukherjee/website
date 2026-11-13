@@ -479,21 +479,26 @@ main {
 .entry-title:hover { color: var(--accent); border: none; }
 
 /* Kind as CFR's small boxed topic tag. */
+/* Kind label: quiet grey text in Inter; lights up with the accent
+   only when the row is hovered. */
 .entry-kind {
-  font-family: var(--mono);
-  font-size: 0.72rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bg);
-  background: var(--accent);
+  color: var(--ink-soft);
+  background: none;
   border: none;
-  padding: 0.3rem 0.5rem;
+  padding: 0;
   line-height: 1;
   margin-left: auto;
   flex: none;
   align-self: center;
+  transition: color 200ms ease;
 }
+
+.entry-list li:hover .entry-kind { color: var(--accent); }
 
 /* ---------- list pages ---------- */
 
