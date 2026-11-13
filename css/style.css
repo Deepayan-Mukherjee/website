@@ -202,7 +202,7 @@ body.is-home .site-top.scrolled .wordmark {
 
 /* Word gap before the surname's initial (the HTML has no space
    between the two halves of the name). */
-.wordmark .smallcaps + .initial { margin-left: 0.42em; }
+.wordmark .smallcaps + .initial { margin-left: 0.3em; }
 
 /* Theme toggle reads like CFR's plain "Log In" link. */
 .theme-toggle {
@@ -247,13 +247,14 @@ nav.site-nav {
 
 body.is-home nav.site-nav { padding: 1.1rem 0; }
 
+/* Links spread edge to edge across the ruled band. */
 .site-nav-inner,
 body.is-home .site-nav-inner {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: baseline;
-  gap: 2.2rem;
-  width: auto;
+  gap: 1.5rem;
+  width: 100%;
   max-width: 100%;
   flex-wrap: wrap;
 }
@@ -262,7 +263,7 @@ nav.site-nav a {
   position: relative;
   border: none;
   font-family: var(--sans);
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: 0.005em;
   text-transform: capitalize;
@@ -675,8 +676,8 @@ article.essay .content > p:first-of-type::first-letter,
   body.is-home .theme-toggle { top: 0.8rem; transform: none; }
   .wordmark, body.is-home .wordmark { font-size: 1.05rem; letter-spacing: 0.06em; }
   nav.site-nav, body.is-home nav.site-nav { padding: 0.8rem 0; }
-  .site-nav-inner, body.is-home .site-nav-inner { gap: 0.4rem 1.4rem; }
-  nav.site-nav a { font-size: 0.95rem; }
+  .site-nav-inner, body.is-home .site-nav-inner { gap: 0.4rem 1rem; }
+  nav.site-nav a { font-size: 1rem; }
   .home-intro { font-size: 1.3rem; }
   article.essay h1, .prose-page h1 { font-size: 2.3rem; }
   .list-header h1 { font-size: 2.5rem; }
