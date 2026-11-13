@@ -82,6 +82,14 @@
   --rule:        rgba(255, 255, 255, 0.22);
   --rule-strong: #FFFFFF;
   --shadow:      rgba(0, 0, 0, 0.5);
+
+  /* nav accent: js/nav-accent.js sets --nav-accent on each link to one
+     of these at random. Orange is the fallback if the script doesn't
+     run. */
+  --nav-orange:  var(--accent);
+  --nav-green:   #34B25C;
+  --nav-white:   #FFFFFF;
+  --nav-accent:  var(--nav-orange);
 }
 
 /* ---- light theme: CFR article pages ---- */
@@ -94,6 +102,10 @@ html[data-theme="light"] {
   --rule:        rgba(20, 20, 20, 0.15);
   --rule-strong: #141414;
   --shadow:      rgba(0, 0, 0, 0.08);
+
+  /* white would vanish on the off-white page, so it becomes ink */
+  --nav-green:   #15803D;
+  --nav-white:   #141414;
 }
 
 * { box-sizing: border-box; }
@@ -236,10 +248,9 @@ body.is-home .theme-toggle { top: 50%; }
 
 .theme-toggle:hover { border-bottom-color: var(--ink); }
 
-/* ---- nav: four links spread across a ruled band. Each carries a
-   small orange index number (01-04). On hover the link turns orange
-   and an orange underline sweeps in beneath it; the current section
-   keeps both. ---- */
+/* ---- nav: four links spread across a ruled band. On hover the link
+   takes the accent colour and an underline in that colour sweeps in
+   beneath it; the current section keeps both. ---- */
 
 nav.site-nav {
   width: 100%;
@@ -251,7 +262,6 @@ nav.site-nav {
   padding: 0;
   border-top: 1px solid var(--rule-strong);
   border-bottom: 1px solid var(--rule-strong);
-  counter-reset: navitem;
 }
 
 body.is-home nav.site-nav { padding: 0; }
@@ -274,9 +284,7 @@ body.is-home .site-nav-inner {
 
 nav.site-nav a {
   position: relative;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.55em;
+  display: inline-block;
   border: none;
   font-family: var(--sans);
   font-size: 1.25rem;
@@ -286,25 +294,13 @@ nav.site-nav a {
   color: var(--ink);
   padding: 1.1rem var(--np);
   white-space: nowrap;
-  counter-increment: navitem;
   transition: color 200ms ease,
               padding 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .site-top.scrolled nav.site-nav a { padding-top: 0.6rem; padding-bottom: 0.6rem; }
 
-/* Index number */
-nav.site-nav a::before {
-  content: counter(navitem, decimal-leading-zero);
-  font-family: var(--mono);
-  font-size: 0.62em;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  transform: translateY(-0.35em);
-}
-
-/* Orange underline just beneath the text. It draws in from the left
+/* Underline just beneath the text. It draws in from the left
    on hover and slides out to the right when the pointer leaves. */
 nav.site-nav a::after {
   content: "";
@@ -313,7 +309,7 @@ nav.site-nav a::after {
   right: var(--np);
   bottom: 0.8rem;
   height: 2px;
-  background: var(--accent);
+  background: var(--nav-accent);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 380ms cubic-bezier(0.65, 0, 0.35, 1),
@@ -330,7 +326,7 @@ nav.site-nav a:focus-visible::after {
 nav.site-nav a:hover,
 nav.site-nav a:focus-visible,
 nav.site-nav a.active {
-  color: var(--accent);
+  color: var(--nav-accent);
   border: none;
 }
 
@@ -344,7 +340,6 @@ nav.site-nav a:focus-visible { outline-offset: -2px; }
 
 @media (prefers-reduced-motion: reduce) {
   nav.site-nav a,
-  nav.site-nav a::before,
   nav.site-nav a::after { transition: none; }
 }
 
@@ -736,7 +731,7 @@ article.essay .content > p:first-of-type::first-letter,
   body.is-home .theme-toggle { top: 0.8rem; transform: none; }
   .wordmark, body.is-home .wordmark { font-size: 1.05rem; letter-spacing: 0.06em; }
   .site-nav-inner, body.is-home .site-nav-inner { --np: 0.4rem; gap: 0; }
-  nav.site-nav a { font-size: 0.95rem; padding: 0.8rem var(--np); gap: 0.35em; }
+  nav.site-nav a { font-size: 1rem; padding: 0.8rem var(--np); }
   nav.site-nav a::after { bottom: 0.55rem; }
   .home-intro { font-size: 1.3rem; }
   article.essay h1, .prose-page h1 { font-size: 2.3rem; }
@@ -751,17 +746,6 @@ article.essay .content > p:first-of-type::first-letter,
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
 }
-
-/* ---------- custom ring cursor: off ----------
-   The ring is hidden and the normal system cursor is restored, even
-   though js/main.js still runs. (You can also delete the cursor code
-   from main.js and the #cursor-ring element from the HTML.) */
-
-#cursor-ring { display: none !important; }
-
-body.has-custom-cursor { cursor: auto; }
-body.has-custom-cursor a,
-body.has-custom-cursor button { cursor: pointer; }
 
 /* ---------- scroll reveal (kept, calmer) ---------- */
 
