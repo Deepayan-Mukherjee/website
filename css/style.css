@@ -78,7 +78,7 @@
   --bg-raised:   #151413;
   --ink:         #FFFFFF;
   --ink-soft:    #A39E98;
-  --accent:      #D9652B;
+  --accent:      #FF5500;
   --rule:        rgba(255, 255, 255, 0.22);
   --rule-strong: #FFFFFF;
   --shadow:      rgba(0, 0, 0, 0.5);
@@ -87,7 +87,7 @@
      of these at random. Orange is the fallback if the script doesn't
      run. */
   --nav-orange:  var(--accent);
-  --nav-green:   #34B25C;
+  --nav-green:   #FF5500;
   --nav-white:   #FFFFFF;
   --nav-accent:  var(--nav-orange);
 }
