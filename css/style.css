@@ -1,0 +1,770 @@
+/* ===========================================================
+   Deepayan Mukherjee, personal writing site
+   Styled after cfr.org: warm off-white page (light) or pure
+   black (dark), a letter-spaced geometric-sans wordmark, a
+   nav between two solid rules, a news serif for headlines and
+   body, an open grotesque sans for ledes and UI, monospaced
+   caps for dates and labels, warm greys for secondary text, and
+   a burnt-orange accent used sparingly (tags, hovered titles).
+   Selectors are unchanged, so the HTML and js/main.js work as-is.
+   =========================================================== */
+
+/* ---- self-hosted fonts (all in /fonts) ----
+   jost-500.woff2          wordmark
+   newsreader(-italic)     serif: headlines and body (optical sizes)
+   inter.woff2             sans: ledes, nav, meta
+   plex-mono-400/500       mono: dates, labels, tags
+   No longer used: pinyon-script, cinzel, playfair-display,
+   eb-garamond(-italic), inter-tight. */
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/jost-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-italic.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/inter.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/plex-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/plex-mono-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --wordmark: "Jost", "Futura", "Century Gothic", "Helvetica Neue", Arial, sans-serif;
+  --sans:     "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --serif:    "Newsreader", Georgia, "Times New Roman", serif;
+  --body:     "Newsreader", Georgia, "Times New Roman", serif;
+  --mono:     "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --max-w: min(80rem, 90vw);
+
+  /* ---- dark theme (default): CFR homepage / event pages ---- */
+  --bg:          #000000;
+  --bg-raised:   #151413;
+  --ink:         #FFFFFF;
+  --ink-soft:    #A39E98;
+  --accent:      #D9652B;
+  --rule:        rgba(255, 255, 255, 0.22);
+  --rule-strong: #FFFFFF;
+  --shadow:      rgba(0, 0, 0, 0.5);
+}
+
+/* ---- light theme: CFR article pages ---- */
+html[data-theme="light"] {
+  --bg:          #F6F5F2;
+  --bg-raised:   #ECE9E4;
+  --ink:         #141414;
+  --ink-soft:    #6E655E;
+  --accent:      #A8481B;
+  --rule:        rgba(20, 20, 20, 0.15);
+  --rule-strong: #141414;
+  --shadow:      rgba(0, 0, 0, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 19px;
+  line-height: 1.7;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+/* Monochrome links, marked by a thin underline. */
+a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-soft);
+  transition: border-color 150ms ease, color 150ms ease;
+}
+a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+img { max-width: 100%; display: block; }
+
+/* ---------- background lattice: off ---------- */
+body::before { display: none; }
+
+.site-header, main, .site-footer { position: relative; z-index: 1; }
+
+/* ---------- header ---------- */
+
+.site-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg);
+  transition: background-color 220ms ease;
+}
+
+.site-header {
+  width: 100%;
+  flex: none;
+  border-bottom: none;
+}
+
+.site-header-inner {
+  position: relative;
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 2.4rem 0 2.2rem;
+  display: flex;
+  justify-content: center;
+  transition: padding 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.site-top.scrolled .site-header-inner {
+  padding: 0.9rem 0 0.8rem;
+}
+
+.site-top.scrolled nav.site-nav {
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+}
+
+.site-mark {
+  border: none;
+  text-decoration: none;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Wordmark: even, widely tracked geometric caps, like
+   COUNCIL on FOREIGN RELATIONS. The swash initials become plain
+   caps of the same weight. */
+.wordmark {
+  font-family: var(--wordmark);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 2.2vw, 2rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  display: inline-block;
+  transition: font-size 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+body.is-home .wordmark {
+  font-size: clamp(1.3rem, 2.8vw, 2.5rem);
+}
+
+.site-top.scrolled .wordmark,
+body.is-home .site-top.scrolled .wordmark {
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+}
+
+.wordmark .initial,
+.wordmark .smallcaps {
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-transform: uppercase;
+  color: inherit;
+  vertical-align: baseline;
+  padding: 0;
+}
+
+/* Word gap before the surname's initial (the HTML has no space
+   between the two halves of the name). */
+.wordmark .smallcaps + .initial { margin-left: 0.3em; }
+
+/* Theme toggle reads like CFR's plain "Log In" link. */
+.theme-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  padding: 0.3rem 0;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 150ms ease;
+}
+
+body.is-home .theme-toggle { top: 50%; }
+
+.theme-toggle:hover { border-bottom-color: var(--ink); }
+
+/* ---- nav: left-aligned sans links between two solid rules that
+   span the content width, not the full screen. ---- */
+
+nav.site-nav {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  flex: none;
+  display: flex;
+  justify-content: flex-start;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  transition: padding 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+body.is-home nav.site-nav { padding: 1.1rem 0; }
+
+/* Links spread edge to edge across the ruled band. */
+.site-nav-inner,
+body.is-home .site-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+nav.site-nav a {
+  position: relative;
+  border: none;
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  text-transform: capitalize;
+  color: var(--ink);
+  padding-bottom: 0.15rem;
+  white-space: nowrap;
+}
+
+nav.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+nav.site-nav a:hover::after,
+nav.site-nav a:focus-visible::after,
+nav.site-nav a.active::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  nav.site-nav a::after { transition: none; }
+}
+
+/* ---------- main / footer ---------- */
+
+main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 3.5rem 0 5rem;
+}
+
+.site-footer {
+  width: 100%;
+  flex: none;
+  margin-top: auto;
+}
+
+.site-footer-inner {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--rule-strong);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ---------- home ---------- */
+
+/* Intro in the large sans used for CFR's standfirst. */
+.home-intro {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--ink);
+  margin: 0 0 4rem;
+  max-width: 44rem;
+}
+
+.home-intro em {
+  font-style: normal;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink-soft);
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+  padding: 0 0 0.8rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.entry-list {
+  list-style: none;
+  margin: 0 0 3rem;
+  padding: 0;
+}
+
+.entry-list li {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  gap: 1.6rem;
+  align-items: baseline;
+}
+
+.entry-list li:first-child { padding-top: 1.5rem; }
+
+.entry-date {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  flex: none;
+  width: 6.5rem;
+}
+
+/* List headlines: upright serif, like CFR's homepage stack. */
+.entry-title {
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.65rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  border: none;
+  transition: color 150ms ease;
+}
+
+.entry-title:hover { color: var(--accent); border: none; }
+
+/* Kind as CFR's small boxed topic tag. */
+.entry-kind {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  padding: 0.3rem 0.5rem;
+  line-height: 1;
+  margin-left: auto;
+  flex: none;
+  align-self: center;
+}
+
+/* ---------- list pages ---------- */
+
+.list-header { margin-bottom: 2.5rem; }
+
+.list-header h1 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-size: 3.6rem;
+  line-height: 1.05;
+  margin: 0 0 0.9rem;
+}
+
+.list-header p {
+  color: var(--ink);
+  font-style: normal;
+  font-family: var(--sans);
+  font-size: 1.2rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ---------- single essay / page ---------- */
+
+article.essay,
+.prose-page {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+article.essay .article-head,
+.prose-page .article-head {
+  margin-bottom: 2.8rem;
+}
+
+/* The CFR signature: large italic serif headline. */
+article.essay h1,
+.prose-page h1 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 1.06;
+  margin: 0 0 1.4rem;
+}
+
+.meta-row {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+/* No drop cap. */
+article.essay .content > p:first-of-type::first-letter,
+.prose-page .content > p:first-of-type::first-letter {
+  all: unset;
+}
+
+.content p { margin: 0 0 1.5rem; font-size: 1.12em; line-height: 1.62; }
+
+/* Standfirst in large sans, as on CFR article pages. */
+.content p.lede {
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 1.35rem;
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--ink);
+  margin-bottom: 2.4rem;
+}
+
+.content h2 {
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+  color: var(--ink);
+  scroll-margin-top: calc(var(--top-h, 5rem) + 1.5rem);
+}
+.content h3 {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 1.05rem;
+  margin: 2.2rem 0 0.8rem;
+  color: var(--ink);
+  scroll-margin-top: calc(var(--top-h, 5rem) + 1.5rem);
+}
+.content blockquote {
+  margin: 2.2rem 0;
+  padding: 0;
+  border: none;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.content hr { border: none; border-top: 1px solid var(--rule); margin: 2.8rem 0; }
+.content code { font-family: var(--mono); font-size: 0.85em; background: var(--bg-raised); padding: 0.1em 0.35em; border-radius: 0; }
+.content strong { color: var(--ink); }
+
+/* ---------- reading aids ---------- */
+
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 45;
+  transition: width 80ms linear;
+}
+
+.reading-meta { display: flex; gap: 0.9rem; align-items: baseline; flex-wrap: wrap; }
+
+.toc {
+  margin: 0 0 2.6rem;
+  padding: 1rem 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+}
+
+@media (min-width: 72rem) {
+  article.essay.has-toc {
+    max-width: 44rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+  }
+  article.essay.has-toc .toc {
+    position: sticky;
+    top: calc(var(--top-h, 5rem) + 2rem);
+    float: left;
+    width: 13rem;
+    margin: 0 0 2rem -16.5rem;
+    border-bottom: none;
+    padding: 0.8rem 0 0;
+  }
+}
+
+.toc-label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 0.6rem;
+}
+
+.toc ol {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+.toc a { border: none; color: var(--ink-soft); }
+.toc a:hover { color: var(--accent); }
+
+.back-to-top {
+  display: inline-block;
+  margin-top: 3rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: none;
+  border-top: 1px solid var(--rule-strong);
+  padding-top: 1rem;
+  width: 100%;
+}
+.back-to-top:hover { color: var(--accent); }
+
+/* ---------- poem ---------- */
+
+.poem {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.3rem;
+  line-height: 1.85;
+  color: var(--ink);
+  white-space: pre-wrap;
+  border: none;
+  padding-left: 0;
+}
+
+/* ---------- photographs ---------- */
+
+.gallery { display: grid; grid-template-columns: 1fr; gap: 2.8rem; }
+.gallery figure { margin: 0; }
+
+@media (min-width: 40rem) {
+  .gallery { grid-template-columns: 1fr 1fr; gap: 2.8rem 2rem; }
+}
+
+.gallery img {
+  border: none;
+  filter: none;
+}
+
+/* Caption in small sans; links (credits) in grey, as CFR does. */
+.gallery figcaption {
+  margin-top: 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.gallery figcaption a {
+  color: var(--ink-soft);
+  font-style: italic;
+  border-bottom: none;
+}
+.gallery figcaption a:hover { color: var(--ink); }
+
+/* ---------- lightbox ---------- */
+
+.gallery-link { border: none; cursor: zoom-in; }
+
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.94);
+  z-index: 50;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  cursor: zoom-out;
+}
+
+.lightbox.open { display: flex; }
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border: none;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 30rem) {
+  body { font-size: 17px; }
+  .site-header-inner { padding: 3.2rem 0 1.4rem; }
+  .theme-toggle,
+  body.is-home .theme-toggle { top: 0.8rem; transform: none; }
+  .wordmark, body.is-home .wordmark { font-size: 1.05rem; letter-spacing: 0.06em; }
+  nav.site-nav, body.is-home nav.site-nav { padding: 0.8rem 0; }
+  .site-nav-inner, body.is-home .site-nav-inner { gap: 0.4rem 1rem; }
+  nav.site-nav a { font-size: 1rem; }
+  .home-intro { font-size: 1.3rem; }
+  article.essay h1, .prose-page h1 { font-size: 2.3rem; }
+  .list-header h1 { font-size: 2.5rem; }
+  .content p.lede { font-size: 1.2rem; }
+  .entry-list li { display: block; padding: 1.2rem 0; }
+  .entry-date { display: block; width: auto; margin-bottom: 0.3rem; }
+  .entry-title { font-size: 1.35rem; }
+  .entry-kind { display: inline-block; margin: 0.6rem 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* ---------- custom ring cursor (kept, now monochrome) ---------- */
+
+#cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-100px, -100px) translate(-50%, -50%);
+  transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              height 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-radius 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 220ms ease,
+              opacity 180ms ease;
+  opacity: 0;
+}
+
+#cursor-ring.active { opacity: 1; }
+
+#cursor-ring.snapped { border-color: var(--ink); border-width: 1.5px; }
+
+body.has-custom-cursor,
+body.has-custom-cursor a,
+body.has-custom-cursor button {
+  cursor: none;
+}
+
+/* ---------- scroll reveal (kept, calmer) ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 900ms ease, transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.no-anim,
+.reveal-fade.no-anim { transition: none !important; }
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 1200ms ease;
+}
+
+.reveal-fade.visible { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-fade { opacity: 1; transform: none; transition: none; }
+}
