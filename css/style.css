@@ -223,6 +223,34 @@ body.is-home .site-top.scrolled .wordmark {
    between the two halves of the name). */
 .wordmark .smallcaps + .initial { margin-left: 0.3em; }
 
+/* Rhombus mark between first and last name: a 120/60 degree
+   rhombus (peak above, reflection below, split by a horizon line).
+   It is as tall as the caps and sits on the baseline, so it scales
+   with the wordmark and follows the theme through currentColor. */
+.wordmark-logo {
+  display: inline-block;
+  width: 1.21em;
+  height: 0.7em;
+  margin: 0 0.3em;
+  vertical-align: baseline;
+  overflow: visible;
+}
+.wordmark-logo .dots {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 0 16;
+}
+.wordmark-logo .line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.wordmark-logo .dot { fill: var(--accent); }
+
 /* Theme toggle reads like CFR's plain "Log In" link. */
 .theme-toggle {
   position: absolute;
