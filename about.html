@@ -10,6 +10,13 @@
   <link rel="preload" href="fonts/pinyon-script.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/cinzel.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    /* About page only: the full logo (with D and M) sits between the names. */
+    .wordmark-logo-full { width: 2.1em; height: 2.1em; margin: 0 0.3em; vertical-align: -0.7em; }
+    .wordmark-logo-full .dots { stroke-width: 9; stroke-dasharray: 0 20; }
+    .wordmark-logo-full .line { stroke-width: 7; }
+    .wordmark-logo-full text { font-family: inherit; font-weight: 500; font-size: 130px; letter-spacing: 0; text-anchor: middle; fill: currentColor; }
+  </style>
   <script>
     if (localStorage.getItem('theme') === 'light') {
       document.documentElement.setAttribute('data-theme', 'light');
@@ -22,7 +29,7 @@
     <header class="site-header">
       <div class="site-header-inner">
         <a class="site-mark" href="./">
-          <span class="wordmark"><span class="initial">D</span><span class="smallcaps">eepayan</span><svg class="wordmark-logo" viewBox="0 0 200 116" aria-hidden="true" focusable="false"><path class="dots" d="M6 58L100 3.7L194 58"/><path class="dots" d="M6 58L100 112.3L194 58"/><path class="line" d="M0 58H200"/><circle class="dot" cx="100" cy="3.7" r="8"/></svg><span class="initial">M</span><span class="smallcaps">ukherjee</span></span>
+          <span class="wordmark"><span class="initial">D</span><span class="smallcaps">eepayan</span><svg class="wordmark-logo wordmark-logo-full" viewBox="0 20 400 400" aria-hidden="true" focusable="false"><path class="dots" d="M20 220L200 40L380 220"/><path class="dots" d="M20 220L200 400L380 220"/><path class="line" d="M8 220H392"/><circle class="dot" cx="200" cy="40" r="17"/><text x="200" y="208">D</text><text x="200" y="323" transform="rotate(180 200 277.5)">M</text></svg><span class="initial">M</span><span class="smallcaps">ukherjee</span></span>
         </a>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">Light</button>
       </div>
